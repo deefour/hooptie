@@ -1,0 +1,59 @@
+{
+  "name": "hooptie-ui",
+  "version": "1.0.0",
+  "description": "Frontend SPA used to interact with listings fetched and persisted by hooptie-cli.",
+  "main": "src/index.pug",
+  "scripts": {
+    "clean": "yarn del-cli {dist,.cache}",
+    "build": "yarn parcel build src/index.pug; cp _redirects dist/",
+    "watch": "yarn parcel src/index.pug",
+    "format": "yarn prettier --write '{./*,./src/**/*}.{js,ts,css,json,vue}'",
+    "check": "yarn tsc --noEmit --project .",
+    "lint": "yarn check && yarn eslint . --ext .ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deefour/hooptie-ui.git"
+  },
+  "keywords": [
+    "deefour",
+    "hooptie",
+    "autolist",
+    "autotrader",
+    "firebase",
+    "firestore"
+  ],
+  "author": "Jason Daly <jason@deefour.me>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deefour/hooptie-ui/issues"
+  },
+  "homepage": "https://deefour.me",
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^3.1.1",
+    "autoprefixer": "^9.7.4",
+    "del-cli": "^3.0.0",
+    "eslint": "^5.16.0",
+    "@vue/eslint-config-prettier": "^5.0.0",
+    "@vue/eslint-config-typescript": "^4.0.0",
+    "eslint-plugin-vue": "^6.1.2",
+    "eslint-plugin-prettier": "^3.1.1",
+    "husky": "^4.2.1",
+    "parcel-bundler": "^1.12.4",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1",
+    "pug": "^2.0.4",
+    "sass": "^1.25.0",
+    "tslint": "^6.0.0",
+    "typescript": "^3.7.5",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "firebase": "^7.8.0",
+    "normalize.css": "^8.0.1",
+    "vue": "^2.6.11",
+    "vue-hot-reload-api": "^2.3.4",
+    "vue-router": "^3.1.5"
+  }
+}
