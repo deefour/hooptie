@@ -1,6 +1,7 @@
-import "firebase/firestore";
+import 'firebase/auth';
+import 'firebase/firestore';
 
-import firebase from "firebase/app";
+import firebase from 'firebase/app';
 
 export const app = firebase.initializeApp({
   apiKey: process.env.FIREBASE_API_KEY,
@@ -12,4 +13,6 @@ export const app = firebase.initializeApp({
   appId: process.env.FIREBASE_APP_ID
 });
 
+export default firebase;
 export const firestore = app.firestore();
+export const auth = app.auth();
