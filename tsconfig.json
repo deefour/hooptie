@@ -20,7 +20,9 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "tests/**/*.tsx",
+    "firebase.config.d.ts",
+    "firebase.client.d.ts"
   ],
   "exclude": ["node_modules"]
 }

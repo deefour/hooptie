@@ -1,5 +1,5 @@
 /dist
 /node_modules
 /.cache
-/firebase.config.js
+/firebase.client.js
 /.firebaserc
