@@ -1,24 +1,23 @@
 <template lang="pug">
-  div
-    h1 Account Login
+  form.max-w-sm.px-3(@submit.prevent="authenticate()")
+    h2 Account Login
 
-    .field
+    div.my-2
       label Email Address
-      input(type="email" v-model="credentials.email" :disabled="loading")
+      input(type="email" v-model="credentials.email" :disabled="loading" autofocus)
 
-    .field
+    div.my-2
       label Password
       input(type="password" v-model="credentials.password" :disabled="loading")
 
     .controls
-      button(type="button" @click="authenticate()" :disabled="loading") Login
-      .loading(v-if="loading") Authenticating...
-
-    .error(v-if="error" v-text="error")
+      button(type="submit" :disabled="loading") Login
+      loading-indicator(v-if="loading") Authenticating...
 </template>
 
 <script lang="ts">
 import Vue from "vue";
+import { mapState } from "vuex";
 
 interface LoginCredentials {
   email: string;
@@ -27,7 +26,6 @@ interface LoginCredentials {
 
 interface LoginComponentData {
   loading: boolean;
-  error: string | null;
   credentials: LoginCredentials;
 }
 
@@ -35,7 +33,6 @@ export default Vue.extend({
   data(): LoginComponentData {
     return {
       loading: false,
-      error: null,
       credentials: {
         email: "",
         password: ""
@@ -43,21 +40,44 @@ export default Vue.extend({
     };
   },
 
+  mounted() {
+    this.$nextTick(this.autofocus.bind(this));
+  },
+
+  watch: {
+    error(newValue) {
+      if (newValue !== undefined) {
+        this.autofocus();
+      }
+    }
+  },
+
+  computed: {
+    ...mapState(["error"])
+  },
+
   methods: {
+    autofocus() {
+      this.$el.querySelector('input[type="email"]').focus();
+    },
+
     isValid() {
       return !Object.values(this.credentials).some(v => v.trim().length === 0);
     },
 
     reset() {
       this.loading = false;
-      this.error = null;
+      this.$store.commit("setError");
     },
 
     async authenticate() {
       this.reset();
 
       if (!this.isValid()) {
-        this.error = "An email address and password are required to login.";
+        this.$store.commit(
+          "setError",
+          new Error("An email address and password are required to login.")
+        );
 
         return;
       }
@@ -73,7 +93,10 @@ export default Vue.extend({
 
         this.$router.push({ path: "/" });
       } catch (error) {
-        this.error = `Login failed. ${error.message}`;
+        this.$store.commit(
+          "setError",
+          new Error(`Login failed. ${error.message}`)
+        );
       } finally {
         this.loading = false;
       }
@@ -81,5 +104,3 @@ export default Vue.extend({
   }
 });
 </script>
-
-<style lang="scss"></style>

@@ -1,6 +1,9 @@
-import { RootState } from '~/types';
+import { RootState } from "~/types";
 
 export default {
   user: undefined,
-  listings: []
+  listings: [],
+  favorited: [],
+  trashed: [],
+  error: undefined
 } as RootState;

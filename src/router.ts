@@ -1,10 +1,9 @@
-import Vue from 'vue';
-import VueRouter, { RouteConfig } from 'vue-router';
+import Vue from "vue";
+import VueRouter, { RouteConfig } from "vue-router";
 
-import Home from './pages/Home.vue';
-import Listing from './pages/Listing.vue';
-import Login from './pages/Login.vue';
-import store from './store';
+import Home from "./pages/Home.vue";
+import Login from "./pages/Login.vue";
+import store from "./store";
 
 Vue.use(VueRouter);
 
@@ -13,20 +12,13 @@ const routes: RouteConfig[] = [
     path: "/logout",
     async beforeEnter(_, __, next) {
       await store.dispatch("signOut");
-      next({ path: "/login" });
+      next({ path: "/" });
     }
   },
 
   {
-    path: "/listings/:vin",
-    component: Listing,
-    meta: { requiresAuth: true }
-  },
-
-  {
     path: "/",
-    component: Home,
-    meta: { requiresAuth: true }
+    component: Home
   },
 
   {

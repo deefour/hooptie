@@ -1,13 +1,17 @@
-import { ActionTree } from 'vuex';
-import { Listing, RootState, UserSettings } from '~/types';
+import { ActionTree } from "vuex";
+import { RootState, UserSettings } from "~/types";
 
-import firebase, { auth, firestore } from '../firebase';
+import firebase, { auth, firestore } from "../../firebase";
 
 // if firebase.auth's state change observer for the state of currentUser hasn't
 // resolved in this amount of time, we'll consider the user logged out.
 const AUTH_STATE_TIMEOUT = 2500;
 
-const waitForAuth = () =>
+/**
+ * Create a promise that attaches to firebase auth state handler. Resolve as soon
+ * as the handler fires with a user.
+ */
+const listenForFirestoreAuthToReceiveCurrentUser = () =>
   new Promise<firebase.User>((resolve, reject) => {
     let isFulfilled = false;
 
@@ -22,23 +26,54 @@ const waitForAuth = () =>
     });
   });
 
-const authInitExpiration = () =>
+/**
+ * Get the already-loaded user from the firestore auth instance. This is in place
+ * just in case the auth instance holds a user prior to the authStateChanged handler
+ * is attached in listenForFirestoreAuthToReceiveCurrentUser()
+ *
+ * This promise will never reject.
+ */
+const fetchCurrentUserFromFirestoreAuth = () =>
+  new Promise<firebase.User>(resolve => {
+    if (auth.currentUser !== null) {
+      resolve(auth.currentUser);
+    }
+  });
+
+/**
+ * If firebase takes too long to respond, consider the authentication having failed.
+ *
+ * This will cause a logout/cleanup of the state store.
+ */
+const consideredFailedAuthOnTimeout = () =>
   new Promise<firebase.User>((_, reject) =>
     setTimeout(reject, AUTH_STATE_TIMEOUT)
   );
 
 const actions: ActionTree<RootState, RootState> = {
-  async signIn({ commit, dispatch }, { email, password }) {
+  async signIn({ dispatch }, { email, password }) {
     await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
     await auth.signInWithEmailAndPassword(email, password);
+    await dispatch("authenticate");
+  },
 
+  async silentlyReauthenticate({ dispatch }) {
+    try {
+      await dispatch("authenticate");
+    } catch (error) {
+      // discard the error
+    }
+  },
+
+  async authenticate({ commit, dispatch }) {
     try {
       // wait for firebase.auth to return the current user, or the init timeout
       // to pass; whatever comes first. A rejection by either of the promises
       // will throw.
       const user = await Promise.race<firebase.User>([
-        waitForAuth(),
-        authInitExpiration()
+        fetchCurrentUserFromFirestoreAuth(),
+        listenForFirestoreAuthToReceiveCurrentUser(),
+        consideredFailedAuthOnTimeout()
       ]);
 
       commit("setUser", user);
@@ -65,27 +100,12 @@ const actions: ActionTree<RootState, RootState> = {
     }
   },
 
+  /**
+   * Clear the local user info and logout of the firebase auth.
+   */
   async signOut({ commit }) {
     commit("setUser");
     await auth.signOut();
-  },
-
-  async loadListings({ commit }) {
-    try {
-      const listings: Listing[] = (
-        await firestore
-          .collection(process.env.LISTING_COLLECTION as string)
-          .where("rejected", "==", false)
-          .orderBy("created_at", "desc")
-          .get()
-      ).docs.map(snapshot => snapshot.data() as Listing);
-
-      commit("setListings", listings);
-    } catch (error) {
-      console.error(error.message);
-
-      throw new Error("Could not load listings from firebase.");
-    }
   }
 };
 
