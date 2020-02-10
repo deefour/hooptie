@@ -1,0 +1,57 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  	function isLoggedIn() {
+    	return request.auth != null
+    }
+    
+    function isActive(uid) {
+      return get(/databases/$(database)/documents/users/$(uid)).data.active
+    }
+     
+    function isLoggedInAndActive() {
+    	return isLoggedIn() && isActive(request.auth.uid)
+    }
+    
+    // rules for the 'trashed' and 'favorited' collections are the same,
+    // so this acts as a way to quickly match both
+    function isDecisionCollection(collectionName) {
+    	return collectionName in ["trashed", "favorited"]
+    }
+    
+    // does the VIN exist in the 'listings' collection (it's keyed by VIN)?
+    function vinExists(vin) {
+    	return exists(/databases/$(database)/documents/listings/$(vin))
+    }
+    
+    match /listings/{vin} {
+      allow read: if true
+      allow write: if false
+    }
+    
+    match /users/{uid} {
+      // a user can read their own document from the 'users' collection (keyed by uid)
+      allow read: if isLoggedIn() && request.auth.uid == uid
+      
+      // a user cannot update this document, otherwise there are issues with things like privilege escalation
+      allow write: if false
+    }
+    
+    // The 'trashed' and 'favorites' root collections are guarded the same way
+    match /{collection}/{id} {
+      // allow a user to read their own decisions documents
+      allow read: if true
+      
+      // an authenticated user can create/update/delete decisions as long as they
+      // provide their uid and a valid vin in the document
+      allow create, update: if isDecisionCollection(collection) 
+      	&& isLoggedInAndActive() 
+        && request.resource.data.uid == request.auth.uid
+        && vinExists(request.resource.data.vin)
+        
+      allow delete: if isDecisionCollection(collection)
+      	&& isLoggedInAndActive()
+        && resource.data.uid == request.auth.uid
+    }
+  }
+}

@@ -9,7 +9,8 @@
     "watch": "yarn parcel src/index.pug",
     "format": "yarn prettier --write '{./*,./src/**/*}.{js,ts,css,json,vue}'",
     "check": "yarn tsc --noEmit --project .",
-    "lint": "yarn check && yarn eslint . --ext .ts"
+    "lint": "yarn check && yarn eslint . --ext .ts",
+    "deploy:rules": "firebase deploy --only firestore:rules"
   },
   "repository": {
     "type": "git",
