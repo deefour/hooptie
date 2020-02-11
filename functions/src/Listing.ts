@@ -1,4 +1,9 @@
+import { has, isEmpty, isNil, omitBy } from "lodash";
+
+import { SearchService } from "./types";
 import { Trim } from "./Vehicle";
+
+import admin = require("firebase-admin");
 
 export default class Listing {
   readonly vin: string;
@@ -18,7 +23,9 @@ export default class Listing {
     readonly transmission: string | undefined,
     readonly color: string | undefined,
     readonly mileage: number,
-    readonly images: URL[]
+    readonly images: URL[],
+    readonly latitude: number | undefined,
+    readonly longitude: number | undefined
   ) {
     this.vin = vin.toUpperCase();
   }
@@ -34,6 +41,8 @@ export default class Listing {
       model: this.model,
       price: this.price,
       title: this.title(),
+      latitude: this.latitude,
+      longitude: this.longitude,
       vin: this.vin,
       year: this.year,
       url: this.url.toString(),
@@ -46,4 +55,47 @@ export default class Listing {
       images: this.images.map(image => image.toString())
     };
   }
+
+  toDocumentData() {
+    // reject keys with undefined or empty values
+    let data: { [key: string]: any } = omitBy(
+      this.toJSON(),
+      v => isNil(v) || isEmpty(v)
+    );
+
+    if (has(data, "latitude") && has(data, "longitude")) {
+      // if coordinates are present, swap them out for a location GeoPoint
+      const { latitude, longitude, ...rest } = data;
+
+      data = {
+        ...rest,
+        location: new admin.firestore.GeoPoint(
+          latitude as number,
+          longitude as number
+        )
+      };
+    }
+
+    return data;
+  }
 }
+
+export const duplicateListingReducer = (
+  services: Map<string, SearchService>
+) => (acc: Map<string, Listing>, listing: Listing) => {
+  if (!acc.has(listing.vin)) {
+    // if a listing for the VIN doesn't exist in the map, set it!
+    acc.set(listing.vin, listing);
+  }
+
+  const a = services.get(listing.service);
+  const b = services.get((acc.get(listing.vin) as Listing).service);
+
+  if (a && b && a.priority > b.priority) {
+    // if the incoming listing's service priority is greater than the one currently
+    // in the map, replace it!
+    acc.set(listing.vin, listing);
+  }
+
+  return acc;
+};

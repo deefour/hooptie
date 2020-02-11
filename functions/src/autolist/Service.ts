@@ -1,15 +1,15 @@
 import { Details, SearchResult } from "./types";
 
+import { AbstractSearchService } from "../SearchService";
 import DetailRequest from "./DetailRequest";
 import Listing from "../Listing";
 import Location from "../Location";
 import ResultTransformer from "./ResultTransformer";
 import SearchRequest from "./SearchRequest";
-import { SearchService } from "../types";
 import Vehicle from "../Vehicle";
 import axios from "axios";
 
-export default class Service implements SearchService {
+export default class Service extends AbstractSearchService {
   readonly identifier = "autolist";
   readonly name = "Autolist";
   readonly priority = 100;
@@ -19,10 +19,10 @@ export default class Service implements SearchService {
     readonly location: Location,
     protected readonly sortBy: string = "mileage"
   ) {
-    //
+    super();
   }
 
-  async getListings(vehicle: Vehicle): Promise<Listing[]> {
+  async getListingsFor(vehicle: Vehicle): Promise<Listing[]> {
     const request = new SearchRequest(
       this.location,
       vehicle,

@@ -5,8 +5,10 @@ service cloud.firestore {
     	return request.auth != null
     }
 
+    // check the settings/user-whitelist document's 'admin' field to see if the
+    // current user's uid is present.
     function isAdmin(uid) {
-      return uid in get(/databases/$(database)/documents/settings/users).data.admins
+      return uid in get(/databases/$(database)/documents/settings/user-whitelist).data.admins
     }
 
     function isLoggedInAndActive() {
@@ -25,7 +27,23 @@ service cloud.firestore {
     }
 
     match /listings/{vin} {
+      // everyone can see the vehicle listings
       allow read: if true
+            // only the admin sdk can make changes
+      allow write: if false
+    }
+
+    match /settings/location {
+      // everyone can see the location the search radius originates from
+      allow read: if true
+      // only the admin sdk can make changes
+      allow write: if false
+    }
+
+    match /vehicles/{id} {
+      // everyone can see the vehicle search definitions
+      allow read: if true
+      // only the admin sdk can make changes
       allow write: if false
     }
 

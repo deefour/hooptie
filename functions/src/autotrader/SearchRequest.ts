@@ -3,7 +3,8 @@ import { intersection, keys, pickBy } from "lodash";
 import Location from "../Location";
 import { ServiceRequest } from "../types";
 import Vehicle from "../Vehicle";
-import queryString from "query-string";
+import { baseUrl } from ".";
+import { stringifyUrl } from "query-string";
 
 const drivelineMapping: { [key: string]: string[] } = {
   AWD4WD: ["awd", "4wd", "4x4"],
@@ -63,12 +64,12 @@ export default class SearchRequest implements ServiceRequest {
   }
 
   endpoint(): string {
-    return "https://www.autotrader.com/rest/searchresults/base";
+    return `${baseUrl}/rest/searchresults/base`;
   }
 
   url(): URL {
     return new URL(
-      queryString.stringifyUrl({
+      stringifyUrl({
         url: this.endpoint(),
         query: this.searchParams()
       })

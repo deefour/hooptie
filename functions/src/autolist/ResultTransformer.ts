@@ -1,11 +1,9 @@
-import { get, isNil } from "lodash";
-
 import { Details } from "./types";
 import Listing from "../Listing";
 import Service from "./Service";
 import { Trim } from "../Vehicle";
-
-const baseUrl = "";
+import { baseUrl } from ".";
+import { isNil } from "lodash";
 
 export default class ResultTransformer {
   constructor(readonly service: Service, readonly details: Details) {
@@ -13,7 +11,13 @@ export default class ResultTransformer {
   }
 
   title(): string {
-    return [this.details.make, this.details.model, this.trim()]
+    const trim = this.trim();
+
+    return [
+      this.details.make,
+      this.details.model,
+      trim !== undefined ? trim.name : undefined
+    ]
       .filter(p => !isNil(p))
       .join(" ");
   }
@@ -34,12 +38,14 @@ export default class ResultTransformer {
       this.details.transmission,
       this.details.exterior_color,
       this.mileage(),
-      this.images()
+      this.images(),
+      this.details.lat,
+      this.details.lon
     );
   }
 
   mileage(): number {
-    if (this.details.mileage < 150) {
+    if (this.details.mileage === undefined || this.details.mileage < 150) {
       return -1;
     }
 
@@ -54,10 +60,6 @@ export default class ResultTransformer {
     return new Trim(this.details.trim);
   }
 
-  spec(attribute: string) {
-    return get(this.details, `specifications.${attribute}.value`);
-  }
-
   images() {
     if (this.details.photo_urls === undefined) {
       return [];
@@ -67,11 +69,7 @@ export default class ResultTransformer {
   }
 
   price(): number | undefined {
-    let price: number | undefined = get(
-      this.details,
-      "pricingDetail.primary",
-      -1
-    );
+    let price = this.details.price_unformatted;
 
     if (price !== undefined && price < 150) {
       price = undefined;

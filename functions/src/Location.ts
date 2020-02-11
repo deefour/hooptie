@@ -1,4 +1,4 @@
-import * as admin from 'firebase-admin';
+import * as admin from "firebase-admin";
 
 export default class Location {
   constructor(
@@ -12,6 +12,8 @@ export default class Location {
   }
 }
 
+// getLocation asynchronously fetch the location details from Cloud Firestore, returning
+// a Location instance for use in search services.
 export const getLocation = async (): Promise<Location> => {
   const doc = await admin
     .firestore()
@@ -22,12 +24,12 @@ export const getLocation = async (): Promise<Location> => {
     throw new Error("No location document exists at [settings/location].");
   }
 
-  return transformDocumentSnapshotToLocation(doc.data() as LocationSnapshot);
+  return transformDocumentDataToLocation(doc.data() as LocationData);
 };
 
-const transformDocumentSnapshotToLocation = (
-  data: LocationSnapshot
-): Location => {
+// transformDocumentSnapshotToLocation transforms a Cloud Firestore document data
+// into a Location instance.
+const transformDocumentDataToLocation = (data: LocationData): Location => {
   const {
     coordinates: { latitude, longitude },
     city,
@@ -38,7 +40,9 @@ const transformDocumentSnapshotToLocation = (
   return new Location(latitude, longitude, city, state, zip);
 };
 
-interface LocationSnapshot extends admin.firestore.DocumentData {
+// LocationData describes the expected structure of a firestore document from the
+// "locations" collection.
+interface LocationData extends admin.firestore.DocumentData {
   coordinates: {
     latitude: number;
     longitude: number;

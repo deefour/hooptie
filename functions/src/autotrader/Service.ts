@@ -1,13 +1,13 @@
+import { AbstractSearchService } from "../SearchService";
 import Listing from "../Listing";
 import Location from "../Location";
 import ResultTransformer from "./ResultTransformer";
 import SearchRequest from "./SearchRequest";
 import { SearchResult } from "./types";
-import { SearchService } from "../types";
 import Vehicle from "../Vehicle";
 import axios from "axios";
 
-export default class Service implements SearchService {
+export default class Service extends AbstractSearchService {
   readonly identifier = "autotrader";
   readonly name = "AutoTrader";
   readonly priority = 10;
@@ -18,10 +18,10 @@ export default class Service implements SearchService {
     protected readonly recordsPerPage: number = 25,
     protected readonly sortBy: string = "mileageAsc"
   ) {
-    //
+    super();
   }
 
-  async getListings(vehicle: Vehicle): Promise<Listing[]> {
+  async getListingsFor(vehicle: Vehicle): Promise<Listing[]> {
     const request = new SearchRequest(
       this.location,
       vehicle,

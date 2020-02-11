@@ -3,3 +3,4 @@
 /.cache
 /firebase.client.js
 /.firebaserc
+firebase.server.js

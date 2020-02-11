@@ -1,6 +1,6 @@
 import { ServiceRequest } from "../types";
 import { baseUrl } from ".";
-import queryString from "query-string";
+import { stringifyUrl } from "query-string";
 
 export default class DetailRequest implements ServiceRequest {
   constructor(readonly vin: string) {
@@ -17,7 +17,7 @@ export default class DetailRequest implements ServiceRequest {
 
   url(): URL {
     return new URL(
-      queryString.stringifyUrl({
+      stringifyUrl({
         url: this.endpoint(),
         query: this.searchParams()
       })

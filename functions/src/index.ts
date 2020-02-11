@@ -1,86 +1,103 @@
-import * as admin from 'firebase-admin';
-import * as functions from 'firebase-functions';
-import { flatten } from 'lodash';
+import * as admin from "firebase-admin";
+import * as functions from "firebase-functions";
 
-import * as autolist from './autolist';
-import * as autotrader from './autotrader';
-import Listing from './Listing';
-import Location, { getLocation } from './Location';
-import { SearchService } from './types';
-import Vehicle, { getVehicles } from './Vehicle';
+import Listing, { duplicateListingReducer } from "./Listing";
 
-admin.initializeApp();
+import { SearchService } from "./types";
+import { MakeService as autolist } from "./autolist";
+import { MakeService as autotrader } from "./autotrader";
+import { flatten } from "lodash";
+import { getLocation } from "./Location";
+import { getVehicles } from "./Vehicle";
+import { makeSearchServices } from "./SearchService";
 
-// // Start writing Firebase Functions
-// // https://firebase.google.com/docs/functions/typescript
-//
-// export const helloWorld = functions.https.onRequest((request, response) => {
-//  response.send("Hello from Firebase!");
-// });
+admin.initializeApp({
+  credential: admin.credential.cert(require("../../firebase.server.js")),
+  databaseURL: require("../../firebase.client.js").databaseURL
+});
 
-export const updateListings = functions.f(async () => {
+export const updateListings = functions.https.onRequest(async (req, res) => {
+  // fetch vehicle and location data from Cloud Firestore
   const [location, vehicles] = await Promise.all([
     getLocation(),
     getVehicles()
   ]);
 
-  const services = [
-    autotrader.MakeService(location),
-    autolist.MakeService(location)
-  ].reduce(
-    (acc, service) => acc.set(service.identifier, service),
-    new Map<string, SearchService>()
+  // init a Map of search services
+  const searchServices: Map<string, SearchService> = makeSearchServices(
+    [autotrader, autolist],
+    location
   );
 
-  const listingPromises: Promise<Listing[]>[] = [...services.values()].reduce(
+  // build up an array of promises that each represent a vehicle search
+  const listingPromises: Promise<Listing[]>[] = [
+    ...searchServices.values()
+  ].reduce(
     (acc: Promise<Listing[]>[], service: SearchService) =>
-      acc.concat(vehicles.map(vehicle => service.getListings(vehicle))),
+      acc.concat(service.getListingsForAll(vehicles)),
     []
   );
 
-  const listings = flatten(await Promise.all(listingPromises)).reduce(
-    (acc: Map<string, Listing>, listing: Listing) => {
-      if (!acc.has(listing.vin)) {
-        // if a listing for the VIN doesn't exist in the map, set it!
-        acc.set(listing.vin, listing);
-      }
+  // run the searches, dedupe via Map, and then convert the result back into an
+  // array of listings
+  const listings: Map<string, Listing> = new Map();
 
-      const a = services.get(listing.service);
-      const b = services.get((acc.get(listing.vin) as Listing).service);
+  try {
+    flatten(await Promise.all(listingPromises)).reduce(
+      duplicateListingReducer(searchServices),
+      listings
+    );
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Failed to fetch new listings.");
+  }
 
-      if (a && b && a.priority > b.priority) {
-        // if the incoming listing's service priority is greater than the one currently
-        // in the map, replace it!
-        acc.set(listing.vin, listing);
-      }
-
-      return acc;
-    },
-    new Map<string, Listing>()
-  );
-
+  // set up for a batch write against firestore
   const batch = admin.firestore().batch();
 
   try {
-    listings.forEach(async listing => {
-      const doc = admin.firestore().doc(`listings/${listing.vin}`);
+    const asyncOperations = Array.from(listings.values()).map<Promise<void>>(
+      async listing => {
+        const doc = admin.firestore().doc(`listings/${listing.vin}`);
+        let snapshot;
 
-      if ((await doc.get()).exists) {
-        batch.update(doc, {
-          ...listing.toJSON(),
-          updated_at: admin.firestore.FieldValue.serverTimestamp()
+        try {
+          snapshot = await doc.get();
+        } catch (error) {
+          throw error;
+        }
+
+        if (snapshot.exists) {
+          // update the existing document with the lastest listing info
+          batch.update(doc, {
+            ...listing.toDocumentData(),
+            updated_at: admin.firestore.FieldValue.serverTimestamp()
+          });
+
+          return;
+        }
+
+        // create a new document for the listing
+        batch.set(doc, {
+          ...listing.toDocumentData(),
+          created_at: admin.firestore.FieldValue.serverTimestamp()
         });
-        return;
       }
+    );
 
-      batch.set(doc, {
-        ...listing.toJSON(),
-        created_at: admin.firestore.FieldValue.serverTimestamp()
-      });
-    });
-
-    await batch.commit();
+    await Promise.all(asyncOperations);
   } catch (error) {
-    throw error;
+    console.error(error);
+    res.status(500).send("Failed to build batch write.");
   }
-})();
+
+  try {
+    // perform the batch write
+    await batch.commit();
+
+    res.status(200).send("Done!");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Failed to apply batch write.");
+  }
+});

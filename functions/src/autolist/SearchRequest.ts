@@ -2,7 +2,7 @@ import Location from "../Location";
 import { ServiceRequest } from "../types";
 import Vehicle from "../Vehicle";
 import { baseUrl } from ".";
-import queryString from "query-string";
+import { stringifyUrl } from "query-string";
 
 export default class SearchRequest implements ServiceRequest {
   constructor(
@@ -26,12 +26,12 @@ export default class SearchRequest implements ServiceRequest {
       model: this.vehicle.model,
       max_mileage: this.vehicle.max_mileage,
       price_min: this.vehicle.min_price,
-      price_max: Math.min(this.vehicle.max_price, 999999),
+      price_max: this.maxPrice(),
       radius: this.radius(),
       sort_filter: this.sortBy,
       trim: this.vehicle.trims.map(t => t.name),
       year_min: this.vehicle.min_year,
-      year_max: Math.min(new Date().getFullYear() + 1, this.vehicle.max_year)
+      year_max: this.maxYear()
     };
 
     return new URLSearchParams(
@@ -39,8 +39,33 @@ export default class SearchRequest implements ServiceRequest {
     );
   }
 
+  maxPrice(): number {
+    const limit = 999999;
+
+    if (this.vehicle.max_price !== undefined) {
+      return Math.min(this.vehicle.max_price, 999999);
+    }
+
+    return limit;
+  }
+
+  maxYear(): number {
+    const limit = new Date().getFullYear() + 1;
+
+    if (this.vehicle.max_year !== undefined) {
+      // cap the max year at next year
+      return Math.min(this.vehicle.max_year, limit);
+    }
+
+    return new Date().getFullYear() + 1;
+  }
+
   radius(): number | string {
-    return this.vehicle.radius > 0 ? this.vehicle.radius : "any";
+    if (this.vehicle.radius !== undefined) {
+      return this.vehicle.radius > 0 ? this.vehicle.radius : "any";
+    }
+
+    return "any";
   }
 
   endpoint(): string {
@@ -49,7 +74,7 @@ export default class SearchRequest implements ServiceRequest {
 
   url(): URL {
     return new URL(
-      queryString.stringifyUrl({
+      stringifyUrl({
         url: this.endpoint(),
         query: this.searchParams()
       })

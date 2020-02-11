@@ -5,11 +5,13 @@ export interface SearchResult {
 export interface Details {
   make: string;
   model: string;
-  price: number;
+  price_unformatted: number | undefined;
   trim: string;
   vin: string;
   year: number;
-  mileage: number;
+  lat: number | undefined;
+  lon: number | undefined;
+  mileage: number | undefined;
   zip: string;
   photo_urls: string[];
   engine_type: string;

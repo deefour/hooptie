@@ -8,7 +8,9 @@ export interface SearchResult {
   title: string;
   trim: string;
   year: number;
-  url: string;
+  website: {
+    href: string;
+  };
   zip?: string;
   specifications: {
     engine?: {

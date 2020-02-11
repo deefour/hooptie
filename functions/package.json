@@ -17,7 +17,7 @@
     "firebase-admin": "^8.6.0",
     "firebase-functions": "^3.3.0",
     "lodash": "^4.17.15",
-    "query-string": "^5.1.1"
+    "query-string": "^6.10.1"
   },
   "devDependencies": {
     "firebase-functions-test": "^0.1.6",

@@ -1,4 +1,4 @@
-import * as admin from 'firebase-admin';
+import * as admin from "firebase-admin";
 
 export class AutoTraderCode {
   constructor(readonly make: string, readonly model: string) {
@@ -12,6 +12,8 @@ export class Trim {
   }
 }
 
+// A vehicle describes a search to be performed against a search service, setting
+// the bounds/criteria of the search.
 export default class Vehicle {
   constructor(
     readonly make: string,
@@ -31,6 +33,8 @@ export default class Vehicle {
   }
 }
 
+// getVehicles asynchronously fetchs vehicle data from the Cloud Firestore, returning
+// an array of Vehicle instances for use in search services.
 export const getVehicles = async (): Promise<Vehicle[]> => {
   const collection = await admin
     .firestore()
@@ -44,15 +48,13 @@ export const getVehicles = async (): Promise<Vehicle[]> => {
   const vehicles: Vehicle[] = [];
 
   collection.forEach(doc =>
-    vehicles.push(
-      transformDocumentSnapshotToVehicle(doc.data() as VehicleSnapshot)
-    )
+    vehicles.push(transformDocumentDataToVehicle(doc.data() as VehicleData))
   );
 
   return vehicles;
 };
 
-const transformDocumentSnapshotToVehicle = (data: VehicleSnapshot): Vehicle => {
+const transformDocumentDataToVehicle = (data: VehicleData): Vehicle => {
   const trims = (data.trims || []).map(t => new Trim(t));
 
   const autoTraderCode = new AutoTraderCode(
@@ -76,7 +78,7 @@ const transformDocumentSnapshotToVehicle = (data: VehicleSnapshot): Vehicle => {
   );
 };
 
-interface VehicleSnapshot extends admin.firestore.DocumentData {
+interface VehicleData extends admin.firestore.DocumentData {
   make: string;
   model: string;
   autotrader: {

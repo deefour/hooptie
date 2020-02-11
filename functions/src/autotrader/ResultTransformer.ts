@@ -2,6 +2,7 @@ import Listing from "../Listing";
 import { SearchResult } from "./types";
 import Service from "./Service";
 import { Trim } from "../Vehicle";
+import { baseUrl } from ".";
 import { get } from "lodash";
 
 export default class ResultTransformer {
@@ -19,13 +20,15 @@ export default class ResultTransformer {
       this.result.vin,
       this.trim(),
       this.result.year,
-      new URL(this.result.url),
+      new URL(this.result.website.href, baseUrl),
       this.result.zip,
       this.spec("engine"),
       this.spec("transmission"),
       this.spec("color"),
       Number(this.spec("mileage") || -1),
-      this.images()
+      this.images(),
+      undefined,
+      undefined
     );
   }
 
