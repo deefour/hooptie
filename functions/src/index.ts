@@ -1,16 +1,15 @@
-import * as autolist from "./autolist";
-import * as autotrader from "./autotrader";
-import * as functions from "firebase-functions";
+import * as admin from 'firebase-admin';
+import * as functions from 'firebase-functions';
+import { flatten } from 'lodash';
 
-import { flatten, uniqBy } from "lodash";
+import * as autolist from './autolist';
+import * as autotrader from './autotrader';
+import Listing from './Listing';
+import Location, { getLocation } from './Location';
+import { SearchService } from './types';
+import Vehicle, { getVehicles } from './Vehicle';
 
-import Listing from "./Listing";
-import Location from "./Location";
-import { SearchService } from "./types";
-import Vehicle from "./Vehicle";
-import admin from "firebase-admin";
-
-admin.initializepp();
+admin.initializeApp();
 
 // // Start writing Firebase Functions
 // // https://firebase.google.com/docs/functions/typescript
@@ -19,9 +18,12 @@ admin.initializepp();
 //  response.send("Hello from Firebase!");
 // });
 
-(async () => {
-  const location = new Location();
-  const vehicles: Vehicle[] = [];
+export const updateListings = functions.f(async () => {
+  const [location, vehicles] = await Promise.all([
+    getLocation(),
+    getVehicles()
+  ]);
+
   const services = [
     autotrader.MakeService(location),
     autolist.MakeService(location)
@@ -30,17 +32,16 @@ admin.initializepp();
     new Map<string, SearchService>()
   );
 
-  const listingPromises: Promise<Listing[]>[] = services.reduce<
-    Promise<Listing[]>[]
-  >(
-    (acc, service) =>
+  const listingPromises: Promise<Listing[]>[] = [...services.values()].reduce(
+    (acc: Promise<Listing[]>[], service: SearchService) =>
       acc.concat(vehicles.map(vehicle => service.getListings(vehicle))),
     []
   );
 
   const listings = flatten(await Promise.all(listingPromises)).reduce(
-    (acc, listing) => {
+    (acc: Map<string, Listing>, listing: Listing) => {
       if (!acc.has(listing.vin)) {
+        // if a listing for the VIN doesn't exist in the map, set it!
         acc.set(listing.vin, listing);
       }
 
@@ -48,6 +49,8 @@ admin.initializepp();
       const b = services.get((acc.get(listing.vin) as Listing).service);
 
       if (a && b && a.priority > b.priority) {
+        // if the incoming listing's service priority is greater than the one currently
+        // in the map, replace it!
         acc.set(listing.vin, listing);
       }
 
@@ -55,4 +58,29 @@ admin.initializepp();
     },
     new Map<string, Listing>()
   );
+
+  const batch = admin.firestore().batch();
+
+  try {
+    listings.forEach(async listing => {
+      const doc = admin.firestore().doc(`listings/${listing.vin}`);
+
+      if ((await doc.get()).exists) {
+        batch.update(doc, {
+          ...listing.toJSON(),
+          updated_at: admin.firestore.FieldValue.serverTimestamp()
+        });
+        return;
+      }
+
+      batch.set(doc, {
+        ...listing.toJSON(),
+        created_at: admin.firestore.FieldValue.serverTimestamp()
+      });
+    });
+
+    await batch.commit();
+  } catch (error) {
+    throw error;
+  }
 })();

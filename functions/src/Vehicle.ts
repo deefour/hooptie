@@ -1,3 +1,5 @@
+import * as admin from 'firebase-admin';
+
 export class AutoTraderCode {
   constructor(readonly make: string, readonly model: string) {
     //
@@ -12,19 +14,82 @@ export class Trim {
 
 export default class Vehicle {
   constructor(
-    readonly drivelines: string[],
-    readonly cylinders: number[],
     readonly make: string,
     readonly model: string,
-    readonly max_mileage: number,
-    readonly min_price: number,
-    readonly max_price: number,
-    readonly radius: number,
     readonly trims: Trim[],
-    readonly min_year: number,
-    readonly max_year: number,
+    readonly max_mileage: number | undefined,
+    readonly min_price: number | undefined,
+    readonly max_price: number | undefined,
+    readonly radius: number | undefined,
+    readonly min_year: number | undefined,
+    readonly max_year: number | undefined,
+    readonly drivelines: string[],
+    readonly cylinders: number[],
     readonly autotrader: AutoTraderCode
   ) {
     this.drivelines = drivelines.map(d => d.trim().toLowerCase());
   }
+}
+
+export const getVehicles = async (): Promise<Vehicle[]> => {
+  const collection = await admin
+    .firestore()
+    .collection("vehicles")
+    .get();
+
+  if (!collection.size) {
+    throw new Error("No vehicles exist in the [vehicles] collection.");
+  }
+
+  const vehicles: Vehicle[] = [];
+
+  collection.forEach(doc =>
+    vehicles.push(
+      transformDocumentSnapshotToVehicle(doc.data() as VehicleSnapshot)
+    )
+  );
+
+  return vehicles;
+};
+
+const transformDocumentSnapshotToVehicle = (data: VehicleSnapshot): Vehicle => {
+  const trims = (data.trims || []).map(t => new Trim(t));
+
+  const autoTraderCode = new AutoTraderCode(
+    data.autotrader.make,
+    data.autotrader.model
+  );
+
+  return new Vehicle(
+    data.make,
+    data.model,
+    trims,
+    data.max_mileage,
+    data.min_price,
+    data.max_price,
+    data.radius,
+    data.min_year,
+    data.max_year,
+    data.drivelines || [],
+    data.cylinders || [],
+    autoTraderCode
+  );
+};
+
+interface VehicleSnapshot extends admin.firestore.DocumentData {
+  make: string;
+  model: string;
+  autotrader: {
+    make: string;
+    model: string;
+  };
+  drivelines?: string[];
+  trims?: string[];
+  cylinders?: number[];
+  max_mileage: number;
+  min_year?: number;
+  max_year?: number;
+  min_price?: number;
+  max_price?: number;
+  radius?: number;
 }

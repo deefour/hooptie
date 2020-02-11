@@ -1,5 +1,5 @@
-import Location from "../Location";
-export Service from "./Service";
+import Location from '../Location';
+import Service from './Service';
 
 export const baseUrl = "https://www.autolist.com";
 
