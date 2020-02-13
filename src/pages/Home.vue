@@ -6,7 +6,7 @@
       table.w-full(v-else)
         thead
           tr
-            th Vehicle
+            th
             th Miles
             th Price
             th Location
@@ -37,4 +37,8 @@ export default Vue.extend({
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+th {
+  @apply text-left;
+}
+</style>
