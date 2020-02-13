@@ -16,7 +16,10 @@
     "axios": "^0.19.2",
     "firebase-admin": "^8.6.0",
     "firebase-functions": "^3.3.0",
+    "ky": "^0.17.0",
     "lodash": "^4.17.15",
+    "p-all": "^2.1.0",
+    "p-map": "^3.0.0",
     "query-string": "^6.10.1"
   },
   "devDependencies": {

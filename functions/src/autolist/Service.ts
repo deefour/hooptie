@@ -1,13 +1,16 @@
+import * as pMap from "p-map";
+
 import { Details, SearchResult } from "./types";
 
 import { AbstractSearchService } from "../SearchService";
 import DetailRequest from "./DetailRequest";
 import Listing from "../Listing";
 import Location from "../Location";
+import { REQUEST_CONCURRENCY } from "../constants";
 import ResultTransformer from "./ResultTransformer";
 import SearchRequest from "./SearchRequest";
 import Vehicle from "../Vehicle";
-import axios from "axios";
+import http from "../http";
 
 export default class Service extends AbstractSearchService {
   readonly identifier = "autolist";
@@ -33,17 +36,18 @@ export default class Service extends AbstractSearchService {
     let results: SearchResult[] = [];
 
     try {
-      results = (await axios.get(request.url().toString())).data.records || [];
+      results =
+        ((await http(request.url()).json()) as { records: SearchResult[] })
+          .records || [];
     } catch (error) {
       throw error;
     }
 
-    return Promise.all(
-      results.map(result =>
-        axios
-          .get(new DetailRequest(result.vin).url().toString())
-          .then(response => response.data as Details)
-      )
+    return pMap(
+      results.map(r => r.vin),
+      async (vin: string): Promise<Details> =>
+        (await http(new DetailRequest(vin).url())).json(),
+      { concurrency: REQUEST_CONCURRENCY }
     ).then(details =>
       details.map(detail => new ResultTransformer(this, detail).toListing())
     );

@@ -8,6 +8,7 @@ export interface SearchService {
   readonly name: string;
   getListingsFor(vehicle: Vehicle): Promise<Listing[]>;
   getListingsForAll(vehicles: Vehicle[]): Promise<Listing[]>;
+  deferredGetListingsForAll(vehicles: Vehicle[]): DeferredGetListings[];
 }
 
 export interface Settings {
@@ -21,3 +22,5 @@ export interface ServiceRequest {
 }
 ``;
 export type ServiceFactory = (location: Location) => SearchService;
+
+export type DeferredGetListings = () => Promise<Listing[]>;

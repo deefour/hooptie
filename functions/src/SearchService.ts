@@ -1,4 +1,4 @@
-import { SearchService, ServiceFactory } from "./types";
+import { DeferredGetListings, SearchService, ServiceFactory } from "./types";
 
 import Listing from "./Listing";
 import Location from "./Location";
@@ -33,5 +33,9 @@ export abstract class AbstractSearchService implements SearchService {
     return Promise.all(
       vehicles.map(vehicle => this.getListingsFor(vehicle))
     ).then(flatten);
+  }
+
+  deferredGetListingsForAll(vehicles: Vehicle[]): DeferredGetListings[] {
+    return vehicles.map(vehicle => this.getListingsFor.bind(this, vehicle));
   }
 }

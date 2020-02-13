@@ -1,15 +1,17 @@
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
 
+import { DeferredGetListings, SearchService } from "./types";
 import Listing, { duplicateListingReducer } from "./Listing";
 
-import { SearchService } from "./types";
+import { REQUEST_CONCURRENCY } from "./constants";
 import { MakeService as autolist } from "./autolist";
 import { MakeService as autotrader } from "./autotrader";
 import { flatten } from "lodash";
 import { getLocation } from "./Location";
 import { getVehicles } from "./Vehicle";
 import { makeSearchServices } from "./SearchService";
+import pAll from "p-all";
 
 admin.initializeApp({
   credential: admin.credential.cert(require("../../firebase.server.js")),
@@ -17,33 +19,42 @@ admin.initializeApp({
 });
 
 export const updateListings = functions.https.onRequest(async (req, res) => {
-  // fetch vehicle and location data from Cloud Firestore
+  console.info("Fetching location and vehicles from firestore...");
   const [location, vehicles] = await Promise.all([
     getLocation(),
     getVehicles()
   ]);
 
-  // init a Map of search services
+  console.info("Creating search service instances...");
   const searchServices: Map<string, SearchService> = makeSearchServices(
     [autotrader, autolist],
     location
   );
 
-  // build up an array of promises that each represent a vehicle search
-  const listingPromises: Promise<Listing[]>[] = [
-    ...searchServices.values()
-  ].reduce(
-    (acc: Promise<Listing[]>[], service: SearchService) =>
-      acc.concat(service.getListingsForAll(vehicles)),
+  console.info("Begin vehicle searches against all services.");
+  const listings: Map<string, Listing> = new Map();
+
+  // create an array of methods that are each responsible for *creating* a search
+  // against a listing service for a vehicle. These tiny functions defer the
+  // initialization of
+  const deferredListingPromises: DeferredGetListings[] = Array.from(
+    searchServices.values()
+  ).reduce(
+    (acc: DeferredGetListings[], service: SearchService) =>
+      acc.concat(service.deferredGetListingsForAll(vehicles)),
     []
   );
 
-  // run the searches, dedupe via Map, and then convert the result back into an
-  // array of listings
-  const listings: Map<string, Listing> = new Map();
-
   try {
-    flatten(await Promise.all(listingPromises)).reduce(
+    // wait on all searches to complete. flatten out to a single array of Listings.
+    const searchResults: Listing[][] = await pAll(deferredListingPromises, {
+      concurrency: REQUEST_CONCURRENCY
+    });
+
+    console.info(
+      "de-dupe the listings by VIN, considering a 'priority' given to each service"
+    );
+    flatten(searchResults).reduce(
       duplicateListingReducer(searchServices),
       listings
     );
@@ -52,7 +63,7 @@ export const updateListings = functions.https.onRequest(async (req, res) => {
     res.status(500).send("Failed to fetch new listings.");
   }
 
-  // set up for a batch write against firestore
+  console.info(`Queue writes for [${listings.size}] listings to firestore`);
   const batch = admin.firestore().batch();
 
   try {
@@ -68,7 +79,11 @@ export const updateListings = functions.https.onRequest(async (req, res) => {
         }
 
         if (snapshot.exists) {
-          // update the existing document with the lastest listing info
+          console.info(
+            `Updating listing for vin [${
+              listing.vin
+            }] (${listing.title()}) from [${listing.service}]`
+          );
           batch.update(doc, {
             ...listing.toDocumentData(),
             updated_at: admin.firestore.FieldValue.serverTimestamp()
@@ -77,7 +92,11 @@ export const updateListings = functions.https.onRequest(async (req, res) => {
           return;
         }
 
-        // create a new document for the listing
+        console.info(
+          `Creating new listing for vin [${
+            listing.vin
+          }] (${listing.title()}) from [${listing.service}]`
+        );
         batch.set(doc, {
           ...listing.toDocumentData(),
           created_at: admin.firestore.FieldValue.serverTimestamp()
@@ -92,7 +111,7 @@ export const updateListings = functions.https.onRequest(async (req, res) => {
   }
 
   try {
-    // perform the batch write
+    console.info("Write everything to firestore.");
     await batch.commit();
 
     res.status(200).send("Done!");
