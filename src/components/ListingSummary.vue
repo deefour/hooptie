@@ -1,5 +1,5 @@
 <template lang="pug">
-  tr.listing(:class="{ trashed: isTrashed(listing), favorited: isFavorited(listing) }")
+  tr.listing(:class="classes")
     td
       .flex.flex-row
         div.flex.flex-col
@@ -13,25 +13,41 @@
             li.pr-2(v-if="listing.color" v-text="listing.color")
             li
               code.text-red-800(v-text="listing.vin")
-            li.new-listing.ml-2(v-if="isNewListing") New Listing!
+            li.new-listing.ml-2(v-if="isNew")
+              font-awesome-icon.mr-1.opacity-75(icon="star")
+              span New Listing!
 
     td.mileage(v-text="mileage")
     td.price(v-text="price")
-    td(v-text="listing.zip_code")
+    td.location-info
+      .flex.flex-row.items-center.justify-between
+        div.flex.flex-col
+          span.leading-none(v-text="listing.zip_code")
+          small.leading-none.mt-1.text-gray-700 (Hartford, CT)
+        a.ml-3.text-lg(href="#" target="_blank")
+          font-awesome-icon(icon="map-marked")
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import ActsAsListing from "../mixins/ActsAsListing";
-import FavoriteToggle from "./FavoriteToggle";
-import TrashToggle from "./TrashToggle";
+import FavoriteToggle from "./FavoriteToggle.vue";
+import TrashToggle from "./TrashToggle.vue";
 import { mapGetters } from "vuex";
 
 export default Vue.extend({
   mixins: [ActsAsListing],
 
   computed: {
-    ...mapGetters(["isAuthenticated", "isTrashed", "isFavorited"])
+    ...mapGetters(["isAuthenticated", "isFavorited", "isTrashed"]),
+
+    classes(): object {
+      return {
+        favorited: this.isFavorited(this.listing),
+        trashed: this.isTrashed(this.listing),
+        new: this.isNew
+      };
+    }
   },
 
   components: {
@@ -89,6 +105,12 @@ a {
   .new-listing {
     @apply font-bold text-pink-500;
     animation: pulse 2s infinite ease-in-out;
+  }
+
+  .location-info {
+    a {
+      @apply opacity-75;
+    }
   }
 }
 </style>
