@@ -59,7 +59,9 @@ export default Vue.extend({
     },
 
     thumbnail(): string | undefined {
-      return this.listing?.images?.[0];
+      return undefined;
+
+      // return this.listing?.images?.[0];
     }
   },
 
