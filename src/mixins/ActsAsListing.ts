@@ -7,7 +7,7 @@ const DAY_IN_MS = 24 * 60 * 60 * 1000;
 // number of days to consider a listing 'new'
 const DAYS_TO_OLD = 3;
 
-const FEET_IN_MILE = 5280;
+const METERS_IN_MILE = 1609.34;
 
 export default Vue.extend({
   props: {
@@ -48,7 +48,7 @@ export default Vue.extend({
         return undefined;
       }
 
-      return Math.round(this.listing.distance / FEET_IN_MILE);
+      return Math.round(this.listing.distance / METERS_IN_MILE);
     },
 
     price(): string | undefined {
