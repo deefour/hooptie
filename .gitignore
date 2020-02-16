@@ -5,3 +5,5 @@
 /.firebaserc
 firebase.server.js
 credentials.*
+.env*
+!.env.example
