@@ -3,8 +3,8 @@
     td
       .flex.flex-row
         div.flex.flex-col
-          favorite-toggle.mb-2(:listing="listing")
-          trash-toggle(:listing="listing" v-if="isAuthenticated")
+          favorite-toggle.mb-2(:listing="listing" @click.stop)
+          trash-toggle(:listing="listing" v-if="isAuthenticated" @click.stop)
         div
           .flex.flex-row.items-center
             a(:href="listing.url" target="_blank" v-text="title")
