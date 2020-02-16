@@ -28,6 +28,10 @@ const mutations: MutationTree<RootState> = {
 
   setError(state, error?: Error) {
     state.error = error;
+  },
+
+  setActive(state, vin?: string) {
+    state.active = vin;
   }
 };
 

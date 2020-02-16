@@ -1,5 +1,5 @@
 <template lang="pug">
-  tr.listing(:class="classes")
+  tr.listing(:class="classes" @click="markActive()")
     td
       .flex.flex-row
         div.flex.flex-col
@@ -45,7 +45,7 @@ export default Vue.extend({
   mixins: [ActsAsListing],
 
   computed: {
-    ...mapGetters(["isAuthenticated", "isFavorited", "isTrashed"]),
+    ...mapGetters(["isAuthenticated", "isFavorited", "isTrashed", "isActive"]),
     hasLocation() {
       return this.listing.location !== undefined;
     },
@@ -54,7 +54,8 @@ export default Vue.extend({
       return {
         favorited: this.isFavorited(this.listing),
         trashed: this.isTrashed(this.listing),
-        new: this.isNew
+        new: this.isNew,
+        active: this.isActive(this.listing)
       };
     },
 
@@ -62,6 +63,12 @@ export default Vue.extend({
       return undefined;
 
       // return this.listing?.images?.[0];
+    }
+  },
+
+  methods: {
+    markActive() {
+      this.$store.commit("setActive", this.listing.vin);
     }
   },
 
@@ -130,6 +137,10 @@ a {
 
   &.favorited {
     @apply bg-blue-100;
+  }
+
+  &.active {
+    @apply bg-yellow-200;
   }
 
   .price {

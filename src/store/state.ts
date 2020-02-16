@@ -5,5 +5,6 @@ export default {
   listings: [],
   favorited: [],
   trashed: [],
-  error: undefined
+  error: undefined,
+  active: undefined
 } as RootState;

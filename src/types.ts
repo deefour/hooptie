@@ -20,6 +20,7 @@ export interface RootState {
   favorited: Decision[];
   trashed: Decision[];
   error?: Error;
+  active?: string;
 }
 
 export interface UserSettings extends firebase.firestore.DocumentData {
