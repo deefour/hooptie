@@ -1,0 +1,7 @@
+/dist
+/node_modules
+/.cache
+/firebase.client.js
+/.firebaserc
+firebase.server.js
+credentials.*

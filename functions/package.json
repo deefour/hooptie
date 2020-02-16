@@ -1,0 +1,38 @@
+{
+  "name": "functions",
+  "scripts": {
+    "build": "tsc",
+    "serve": "npx build && firebase serve --only functions",
+    "shell": "npx build && firebase functions:shell",
+    "start": "npx shell",
+    "lint": "npx eslint . --ext .ts",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "10"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "@googlemaps/google-maps-services-js": "^2.0.2",
+    "firebase-admin": "^8.6.0",
+    "firebase-functions": "^3.3.0",
+    "ky": "^0.17.0",
+    "ky-universal": "^0.4.0",
+    "lodash": "^4.17.15",
+    "p-all": "^2.1.0",
+    "p-map": "^3.0.0",
+    "query-string": "^6.10.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.19.2",
+    "@typescript-eslint/parser": "^2.19.2",
+    "eslint": "^6.8.0",
+    "eslint-plugin-prettier": "^3.1.2",
+    "firebase-functions-test": "^0.1.6",
+    "prettier": "^1.19.1",
+    "tslint": "^5.12.0",
+    "typescript": "^3.2.2"
+  },
+  "private": true
+}

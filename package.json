@@ -1,0 +1,65 @@
+{
+  "name": "hooptie-ui",
+  "version": "1.0.0",
+  "description": "Frontend SPA used to interact with listings fetched and persisted by hooptie-cli.",
+  "main": "src/index.pug",
+  "scripts": {
+    "clean": "yarn del-cli {dist,.cache}",
+    "build": "yarn parcel build src/index.pug; cp _redirects dist/",
+    "watch": "yarn parcel src/index.pug",
+    "format": "yarn prettier --write '{./*,./{src,functions}/**/*}.{js,ts,css,json,vue}'",
+    "check": "yarn tsc --noEmit --project .",
+    "lint": "yarn check && yarn eslint . --ext .ts",
+    "deploy:rules": "firebase deploy --only firestore:rules"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deefour/hooptie-ui.git"
+  },
+  "keywords": [
+    "deefour",
+    "hooptie",
+    "autolist",
+    "autotrader",
+    "firebase",
+    "firestore"
+  ],
+  "author": "Jason Daly <jason@deefour.me>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/deefour/hooptie-ui/issues"
+  },
+  "homepage": "https://deefour.me",
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^3.1.1",
+    "@vue/eslint-config-prettier": "^6.0.0",
+    "@vue/eslint-config-typescript": "^5.0.1",
+    "autoprefixer": "^9.7.4",
+    "components": "^0.1.0",
+    "del-cli": "^3.0.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-vue": "^6.1.2",
+    "husky": "^4.2.3",
+    "parcel-bundler": "^1.12.4",
+    "postcss-nested": "^4.2.1",
+    "prettier": "^1.19.1",
+    "pretty-quick": "^2.0.1",
+    "pug": "^2.0.4",
+    "tslint": "^6.0.0",
+    "typescript": "^3.7.5",
+    "vue-hot-reload-api": "^2.3.4",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.27",
+    "@fortawesome/free-solid-svg-icons": "^5.12.1",
+    "@fortawesome/vue-fontawesome": "^0.1.9",
+    "babel-polyfill": "^6.26.0",
+    "firebase": "^7.8.2",
+    "tailwindcss": "^1.2.0",
+    "vue": "^2.6.11",
+    "vue-router": "^3.1.5",
+    "vuex": "^3.1.2"
+  }
+}

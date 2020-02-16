@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  font-size: 12px;
+  font-family: "Open Sans", sans-serif;
+}
+
+h1 {
+  @apply font-black;
+}
+
+h2 {
+  @apply font-bold text-lg;
+}
+
+td,
+th {
+  @apply py-1 px-3 text-left;
+}
+
+label {
+  @apply font-semibold block;
+}
+
+input {
+  @apply block w-full rounded py-1 px-3 mb-2 border border-gray-500 bg-gray-100;
+}
+
+button {
+  @apply bg-blue-500 font-bold text-white py-1 px-3 rounded my-2;
+}
+
+@keyframes pulse {
+  0% {
+    @apply opacity-75;
+  }
+  50% {
+    @apply opacity-100;
+  }
+  100% {
+    @apply opacity-75;
+  }
+}
