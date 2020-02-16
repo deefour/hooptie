@@ -30,7 +30,7 @@ export default class Listing {
     readonly engine: string | undefined,
     readonly transmission: string | undefined,
     readonly color: string | undefined,
-    readonly mileage: number,
+    readonly mileage: number | undefined,
     readonly images: URL[],
     readonly latitude: number | undefined,
     readonly longitude: number | undefined

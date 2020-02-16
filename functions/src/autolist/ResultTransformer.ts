@@ -1,6 +1,7 @@
 import { isNil } from "lodash";
 
 import { baseUrl } from ".";
+import { MINIMUM_MILEAGE } from "../constants";
 import Listing from "../Listing";
 import { Trim } from "../Vehicle";
 import Service from "./Service";
@@ -45,9 +46,12 @@ export default class ResultTransformer {
     );
   }
 
-  mileage(): number {
-    if (this.details.mileage === undefined || this.details.mileage < 150) {
-      return -1;
+  mileage(): number | undefined {
+    if (
+      this.details.mileage === undefined ||
+      this.details.mileage < MINIMUM_MILEAGE
+    ) {
+      return undefined;
     }
 
     return this.details.mileage;

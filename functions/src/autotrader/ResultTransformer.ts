@@ -1,6 +1,7 @@
 import { get } from "lodash";
 
 import { baseUrl } from ".";
+import { MINIMUM_MILEAGE } from "../constants";
 import Listing from "../Listing";
 import { Trim } from "../Vehicle";
 import Service from "./Service";
@@ -26,7 +27,7 @@ export default class ResultTransformer {
       this.spec("engine"),
       this.spec("transmission"),
       this.spec("color"),
-      Number(this.spec("mileage") || -1),
+      this.mileage(),
       this.images(),
       undefined,
       undefined
@@ -43,6 +44,29 @@ export default class ResultTransformer {
 
   spec(attribute: string): any {
     return get(this.result, `specifications.${attribute}.value`);
+  }
+
+  mileage(): number | undefined {
+    const rawMileage = this.spec("mileage");
+
+    if (rawMileage === undefined) {
+      return undefined;
+    }
+    const justNumbers = String(rawMileage)
+      .replace(/\.\d+/, "")
+      .replace(/\D/g, "");
+
+    if (justNumbers.length === 0) {
+      return undefined;
+    }
+
+    const asNumber = Number(justNumbers);
+
+    if (asNumber === NaN || asNumber < MINIMUM_MILEAGE) {
+      return undefined;
+    }
+
+    return asNumber;
   }
 
   images(): URL[] {
