@@ -3,15 +3,21 @@
     loading-indicator.px-3(v-if="loading") Loading listings...
     .listings(v-else)
       p.no-listings(v-if="listings.length === 0") There is no listing data available for display.
-      table.w-full(v-else)
-        thead
-          tr
-            th
-            th Miles
-            th Price
-            th Location
-        tbody
-          listing-summary(v-for="listing in listings" :key="listing.vin" :listing="listing")
+      template(v-else)
+        ul.rejectors
+          li.label
+            b Showing
+          listing-rejector.rejector(v-for="rejector in rejectors" :key="rejector.id" :rejector="rejector")
+        p.no-listings(v-if="preparedListings.length === 0") No listings match the remaining filters.
+        table.w-full(v-else)
+          thead
+            tr
+              th
+              th Miles
+              th Price
+              th Location
+          tbody
+            listing-summary(v-for="listing in preparedListings" :key="listing.vin" :listing="listing")
 </template>
 
 <script lang="ts">
@@ -20,25 +26,74 @@ import ListingSummary from "../components/ListingSummary.vue";
 import { Listing } from "../types";
 import { mapState, mapGetters } from "vuex";
 import { firestore } from "firebase";
+import { reject } from "lodash";
+import rejectors from "../rejectors";
+import ListingRejector from "../components/ListingRejector.vue";
 
 export default Vue.extend({
+  data() {
+    return {
+      rejectors
+    };
+  },
+
   computed: {
-    ...mapState(["listings", "error"]),
-    ...mapGetters(["hasListings"]),
+    ...mapState(["error", "listings"]),
+    ...mapGetters(["hasListings", "isFavorited"]),
 
     loading(): boolean {
       return !this.error && !this.hasListings;
+    },
+
+    preparedListings(): Listing[] {
+      const activeRejectors = this.rejectors.filter(({ id }) =>
+        this.$store.state.rejectors.includes(id)
+      );
+
+      // apply the rejectors
+      const filteredListings = activeRejectors.reduce(
+        (listings, rejector) => reject(listings, rejector.filter),
+        this.listings
+      );
+
+      // push favorited listings to the top
+      filteredListings.sort((a: Listing, b: Listing): number => {
+        if (this.isFavorited(a)) {
+          return -1;
+        }
+
+        if (this.isFavorited(b)) {
+          return 1;
+        }
+
+        return 0;
+      });
+
+      return filteredListings;
     }
   },
 
   components: {
-    ListingSummary
+    ListingSummary,
+    ListingRejector
   }
 });
 </script>
 
 <style scoped>
 th {
-  @apply text-left;
+  @apply text-left bg-gray-100;
+}
+
+.rejectors {
+  @apply text-sm flex flex-row items-center mx-3 my-5;
+
+  li {
+    @apply mr-2;
+  }
+}
+
+.no-listings {
+  @apply mx-3;
 }
 </style>

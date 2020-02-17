@@ -1,13 +1,7 @@
 import Vue from "vue";
 import { Listing } from "~/types";
 
-// # of milliseconds in a single day
-const DAY_IN_MS = 24 * 60 * 60 * 1000;
-
-// number of days to consider a listing 'new'
-const DAYS_TO_OLD = 3;
-
-const METERS_IN_MILE = 1609.34;
+import { DAY_AS_MILLISECONDS, MILE_AS_METERS } from "../constants";
 
 export default Vue.extend({
   props: {
@@ -24,7 +18,7 @@ export default Vue.extend({
      * @return boolean
      */
     isNew(): boolean {
-      const threshold = new Date().getTime() - DAYS_TO_OLD * DAY_IN_MS;
+      const threshold = new Date().getTime() - 3 * DAY_AS_MILLISECONDS;
 
       return this.listing.created_at.toDate().getTime() >= threshold;
     },
@@ -48,7 +42,7 @@ export default Vue.extend({
         return undefined;
       }
 
-      return Math.round(this.listing.distance / METERS_IN_MILE);
+      return Math.round(this.listing.distance / MILE_AS_METERS);
     },
 
     price(): string | undefined {

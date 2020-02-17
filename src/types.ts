@@ -21,8 +21,16 @@ export interface RootState {
   trashed: Decision[];
   error?: Error;
   active?: string;
+  rejectors: string[];
 }
 
 export interface UserSettings extends firebase.firestore.DocumentData {
   active: boolean;
+}
+
+export interface ListingRejector {
+  id: string;
+  name: string;
+  description: string;
+  filter: (listing: Listing) => boolean;
 }

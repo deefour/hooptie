@@ -1,5 +1,6 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 import {
+  faCheck,
   faHeart,
   faStar,
   faTimes,
@@ -12,5 +13,6 @@ library.add(faHeart);
 library.add(faTrash);
 library.add(faTimes);
 library.add(faStar);
+library.add(faCheck);
 
 Vue.component("font-awesome-icon", FontAwesomeIcon);

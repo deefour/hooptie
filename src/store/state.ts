@@ -6,5 +6,6 @@ export default {
   favorited: [],
   trashed: [],
   error: undefined,
-  active: undefined
+  active: undefined,
+  rejectors: ["trashed"]
 } as RootState;

@@ -32,6 +32,18 @@ const mutations: MutationTree<RootState> = {
 
   setActive(state, vin?: string) {
     state.active = vin;
+  },
+
+  toggleRejector(state, id) {
+    const index = state.rejectors.findIndex(
+      (haystackId: string): boolean => haystackId === id
+    );
+
+    if (index >= 0) {
+      state.rejectors.splice(index, 1);
+    } else {
+      state.rejectors.push(id);
+    }
   }
 };
 
