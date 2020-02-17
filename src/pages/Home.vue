@@ -4,10 +4,10 @@
     .listings(v-else)
       p.no-listings(v-if="listings.length === 0") There is no listing data available for display.
       template(v-else)
-        ul.rejectors
-          li.label
-            b Showing
-          listing-rejector.rejector(v-for="rejector in rejectors" :key="rejector.id" :rejector="rejector")
+        .rejectors
+          strong Showing:
+          ul
+            listing-rejector.rejector(v-for="rejector in rejectors" :key="rejector.id" :rejector="rejector")
         p.no-listings(v-if="preparedListings.length === 0") No listings match the remaining filters.
         table.w-full(v-else)
           thead
@@ -86,10 +86,24 @@ th {
 }
 
 .rejectors {
-  @apply text-sm flex flex-row items-center mx-3 my-5;
+  @apply flex flex-row flex-no-wrap items-start text-sm mx-2 mt-5 mb-3;
 
-  li {
-    @apply mr-2;
+  strong {
+    @apply py-1 hidden;
+  }
+
+  ul {
+    @apply flex flex-row items-center flex-wrap;
+  }
+
+  @screen sm {
+    strong {
+      @apply block;
+    }
+
+    ul {
+      @apply ml-3;
+    }
   }
 }
 

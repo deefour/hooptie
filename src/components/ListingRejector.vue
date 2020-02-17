@@ -33,7 +33,7 @@ export default Vue.extend({
 
 <style scoped>
 li {
-  @apply rounded-full bg-gray-200 py-1 px-3 cursor-pointer flex flex-row flex-no-wrap items-center;
+  @apply rounded-full bg-gray-200 py-1 px-3 cursor-pointer flex flex-row flex-no-wrap items-center whitespace-no-wrap mr-2 mb-2;
 
   .icon {
     @apply mr-2;
