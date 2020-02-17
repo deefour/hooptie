@@ -66,22 +66,51 @@ Netlify automatically pulls, builds, and publishes the latest `HEAD` commit in t
 
 Deploying the cloud functions requires that the [Firebase CLI](https://firebase.google.com/docs/cli) be installed on your system.
 
-The cloud functions that interact with the Google Maps services expect an API Key with privileges to the following services be created:
+#### Configuration
+
+Some of the cloud functions rely on configuration that is not automatically brought into the environment during deployment. Each configuration's key / value pair can be set through the firebase CLI with a command in this format:
+
+```bash
+firebase functions:config:set [key]=[value]
+```
+
+Learn more about [environment configuration](https://firebase.google.com/docs/functions/config-env).
+
+The following configuration is needed:
+
+#### Google Maps services API key
+
+An API key must be generated through the [Google Cloud Platform Console](https://cloud.google.com/console/google/maps-apis/overview) with privileges to interact with the following API's:
 
  - Geocoding API
  - Distance Matrix API
 
-The API key needs to then be set via the Firebase CLI. Learn more about [environment configuration](https://firebase.google.com/docs/functions/config-env).
+This key needs to be configured under the `credentials.maps_key` key.
 
 ```bash
-firebase functions:config:set credentials.maps_key="[API_KEY_HERE]"
+firebase functions:config:set credentials.maps_key="[your api key here]"
 ```
 
-Finally, deploy the functions by running the following command:
+Learn more about [getting an API key](https://developers.google.com/maps/documentation/geocoding/get-api-key) from the Google Cloud Platform Console.
+
+##### Web Push certificate key pair
+
+From the [Cloud Messaging](https://console.firebase.google.com/u/0/project/_/settings/cloudmessaging/) tab of your Firebase project's Settings tab, click __Generate Key Pair__.
+
+This key pair needs to be configured under the `credentials.web_push` key.
+
+```bash
+firebase functions:config:set credentials.web_push="[your key pair here]"
+```
+
+Learn more about [configuring web credentials with FCM](https://firebase.google.com/docs/cloud-messaging/js/client#configure_web_credentials_with_fcm).
+
+#### Publishing
+
+With the above configuration in place, deploy the functions by running the following command:
 
 ```bash
 firebase deploy --only functions
 ```
-
 
 (c) 2020 Jason Daly (jason@deefour.me)
