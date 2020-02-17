@@ -14,3 +14,14 @@ export const AUTOTRADER = "autotrader";
 
 /** Identifying string for the Autolist.com search service */
 export const AUTOLIST = "autolist";
+
+/**
+ * How many days back from NOW should listings be fetched? The query is based on
+ * each listing's original creation date.
+ */
+export const DAYS_TO_FETCH = 10;
+
+/**
+ * The max # of listings to fetch from firestore for display.
+ */
+export const QUERY_LIMIT = 750;

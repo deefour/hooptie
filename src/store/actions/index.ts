@@ -1,6 +1,7 @@
 import { ActionTree } from "vuex";
 import { Listing, RootState } from "~/types";
 
+import { QUERY_LIMIT } from "../../constants";
 import { firestore } from "../../firebase";
 import auth from "./auth";
 import decisions from "./decisions";
@@ -32,6 +33,7 @@ const actions: ActionTree<RootState, RootState> = {
         await firestore
           .collection("listings")
           .orderBy("created_at", "desc")
+          .limit(QUERY_LIMIT)
           .get()
       ).docs.map(snapshot => snapshot.data() as Listing);
 
