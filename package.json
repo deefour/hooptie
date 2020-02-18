@@ -1,7 +1,7 @@
 {
   "name": "hooptie",
   "version": "1.0.0",
-  "description": "Frontend SPA used to interact with listings fetched and persisted by hooptie-cli.",
+  "description": "A Vue.js & Firebase application to make tracking used car listings easier.",
   "main": "src/index.pug",
   "scripts": {
     "clean": "yarn del-cli {dist,.cache}",
