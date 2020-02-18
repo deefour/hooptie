@@ -51,7 +51,7 @@ const consideredFailedAuthOnTimeout = () =>
 
 const actions: ActionTree<RootState, RootState> = {
   async signIn({ dispatch }, { email, password }) {
-    await auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+    await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
     await auth.signInWithEmailAndPassword(email, password);
     await dispatch("authenticate");
   },
