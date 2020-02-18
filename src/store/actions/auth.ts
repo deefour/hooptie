@@ -11,29 +11,28 @@ const AUTH_STATE_TIMEOUT = 2500;
  * Create a promise that attaches to firebase auth state handler. Resolve as soon
  * as the handler fires with a user.
  */
-const listenForFirestoreAuthToReceiveCurrentUser = () =>
-  new Promise<firebase.User>((resolve, reject) => {
+export const getCurrentUserWhenAvailable = () =>
+  new Promise<firebase.User>(resolve => {
     let isFulfilled = false;
 
     auth.onAuthStateChanged(user => {
-      if (isFulfilled) {
+      if (isFulfilled || user === null) {
         return;
       }
 
       isFulfilled = true;
-
-      user ? resolve(user) : reject();
+      resolve(user);
     });
   });
 
 /**
  * Get the already-loaded user from the firestore auth instance. This is in place
  * just in case the auth instance holds a user prior to the authStateChanged handler
- * is attached in listenForFirestoreAuthToReceiveCurrentUser()
+ * is attached in getCurrentUserWhenAvailable()
  *
  * This promise will never reject.
  */
-const fetchCurrentUserFromFirestoreAuth = () =>
+export const getCurrentUserNow = () =>
   new Promise<firebase.User>(resolve => {
     if (auth.currentUser !== null) {
       resolve(auth.currentUser);
@@ -71,8 +70,8 @@ const actions: ActionTree<RootState, RootState> = {
       // to pass; whatever comes first. A rejection by either of the promises
       // will throw.
       const user = await Promise.race<firebase.User>([
-        fetchCurrentUserFromFirestoreAuth(),
-        listenForFirestoreAuthToReceiveCurrentUser(),
+        getCurrentUserNow(),
+        getCurrentUserWhenAvailable(),
         consideredFailedAuthOnTimeout()
       ]);
 

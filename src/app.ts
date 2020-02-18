@@ -10,6 +10,8 @@ import { firestore } from "./firebase";
 import router from "./router";
 import store from "./store";
 
+import "./webpush";
+
 Vue.config.productionTip = false;
 
 Vue.prototype.$store = store;
