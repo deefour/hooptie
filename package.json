@@ -29,7 +29,7 @@
   "bugs": {
     "url": "https://github.com/deefour/hooptie/issues"
   },
-  "homepage": "https://deefour.me",
+  "homepage": "https://hooptie.deefour.me",
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^2.0.6",
     "@vue/component-compiler-utils": "^3.1.1",
