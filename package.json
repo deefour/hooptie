@@ -27,10 +27,11 @@
   "author": "Jason Daly <jason@deefour.me>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/deefour/hooptie-ui/issues"
+    "url": "https://github.com/deefour/hooptie/issues"
   },
   "homepage": "https://deefour.me",
   "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^2.0.6",
     "@vue/component-compiler-utils": "^3.1.1",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^5.0.1",
