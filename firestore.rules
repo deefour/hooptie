@@ -48,11 +48,11 @@ service cloud.firestore {
     }
 
     match /users/{uid} {
-      // a user can read their own document from the 'users' collection (keyed by uid)
-      allow read: if isLoggedIn() && request.auth.uid == uid
+      // a user can read and modify their own document from the 'users' collection (keyed by uid)
+      allow read, update: if isLoggedIn() && request.auth.uid == uid
 
-      // a user cannot update this document, otherwise there are issues with things like privilege escalation
-      allow write: if false
+      // a user cannot create or delete records in this collection
+      allow create, delete: if false
     }
 
     // The 'trashed' and 'favorites' root collections are guarded the same way
