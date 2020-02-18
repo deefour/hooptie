@@ -78,6 +78,16 @@ Learn more about [environment configuration](https://firebase.google.com/docs/fu
 
 The following configuration is needed:
 
+#### Application URL
+
+Some Web Push impelementations support clicking through to a destination URL. This should be the base URL for the hooptie application in production.
+
+This application URL needs to be configured under the `app.url` key.
+
+```bash
+firebase functions:config:set app.url:"[full application url here]"
+```
+
 #### Google Maps services API key
 
 An API key must be generated through the [Google Cloud Platform Console](https://cloud.google.com/console/google/maps-apis/overview) with privileges to interact with the following API's:

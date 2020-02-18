@@ -7,3 +7,5 @@ export const REQUEST_CONCURRENCY = 3;
  * The application will treat any vehicle mileages under this threshold as "not reported".
  */
 export const MINIMUM_MILEAGE = 150;
+
+export const TOPIC_NEW_LISTINGS = "New Listings";

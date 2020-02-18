@@ -1,18 +1,62 @@
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
-import { flatten } from "lodash";
-import pAll from "p-all";
+
+import { DeferredGetListings, SearchService } from "../types";
+import Listing, { duplicateListingReducer } from "../Listing";
+import { REQUEST_CONCURRENCY, TOPIC_NEW_LISTINGS } from "../constants";
 
 import { MakeService as autolist } from "../autolist";
 import { MakeService as autotrader } from "../autotrader";
-import { REQUEST_CONCURRENCY } from "../constants";
-import Listing, { duplicateListingReducer } from "../Listing";
+import { flatten } from "lodash";
 import { getLocation } from "../Location";
-import { makeSearchServices } from "../SearchService";
-import { DeferredGetListings, SearchService } from "../types";
 import { getVehicles } from "../Vehicle";
+import { makeSearchServices } from "../SearchService";
+import pAll from "p-all";
 
-export default async (context: functions.EventContext): Promise<void> => {
+/**
+ * When 1+ listings have been newly created, send an FCM notification to the
+ * 'New Listings' topic stating new listings are available.
+ *
+ * @param {Number} newListingsCount
+ */
+const sendNewListingsNotification = async (
+  newListingsCount: number
+): Promise<void> => {
+  if (newListingsCount < 1) {
+    return;
+  }
+
+  let body = "There is 1 new listing to review.";
+
+  if (newListingsCount !== 1) {
+    body = `There are ${newListingsCount} new listings to review.`;
+  }
+
+  const payload = {
+    notification: {
+      title: "New Listings Available!",
+      body
+    },
+    webpush: {
+      fcm_options: {
+        link: functions.config().app.url
+      }
+    }
+  };
+
+  try {
+    const response = await admin
+      .messaging()
+      .sendToTopic(TOPIC_NEW_LISTINGS, payload);
+
+    console.info("Notification sent", response);
+  } catch (error) {
+    console.info("Notification failed");
+    console.error(error);
+  }
+};
+
+export default async (): Promise<void> => {
   console.info("Fetching location and vehicles from firestore...");
   const [location, vehicles] = await Promise.all([
     getLocation(),
@@ -59,6 +103,7 @@ export default async (context: functions.EventContext): Promise<void> => {
 
   console.info(`Queue writes for [${listings.size}] listings to firestore`);
   const batch = admin.firestore().batch();
+  let newListingsCount = 0;
 
   try {
     const asyncOperations = Array.from(listings.values()).map<Promise<void>>(
@@ -89,6 +134,8 @@ export default async (context: functions.EventContext): Promise<void> => {
           ...listing.toDocumentData(),
           created_at: admin.firestore.FieldValue.serverTimestamp()
         });
+
+        newListingsCount++;
       }
     );
 
@@ -101,6 +148,7 @@ export default async (context: functions.EventContext): Promise<void> => {
   try {
     console.info("Write everything to firestore.");
     await batch.commit();
+    await sendNewListingsNotification(newListingsCount);
     console.log("Write success. Listings have been updated");
   } catch (error) {
     console.error(error);

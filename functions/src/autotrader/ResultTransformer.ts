@@ -1,11 +1,10 @@
-import { get } from "lodash";
-
-import { baseUrl } from ".";
-import { MINIMUM_MILEAGE } from "../constants";
 import Listing from "../Listing";
-import { Trim } from "../Vehicle";
-import Service from "./Service";
+import { MINIMUM_MILEAGE } from "../constants";
 import { SearchResult } from "./types";
+import Service from "./Service";
+import { Trim } from "../Vehicle";
+import { baseUrl } from ".";
+import { get } from "lodash";
 
 export default class ResultTransformer {
   constructor(readonly service: Service, readonly result: SearchResult) {
@@ -62,7 +61,7 @@ export default class ResultTransformer {
 
     const asNumber = Number(justNumbers);
 
-    if (asNumber === NaN || asNumber < MINIMUM_MILEAGE) {
+    if (isNaN(asNumber) || asNumber < MINIMUM_MILEAGE) {
       return undefined;
     }
 
