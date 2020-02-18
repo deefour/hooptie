@@ -1,5 +1,5 @@
 {
-  "name": "hooptie-ui",
+  "name": "hooptie",
   "version": "1.0.0",
   "description": "Frontend SPA used to interact with listings fetched and persisted by hooptie-cli.",
   "main": "src/index.pug",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/deefour/hooptie-ui.git"
+    "url": "git+https://github.com/deefour/hooptie.git"
   },
   "keywords": [
     "deefour",
