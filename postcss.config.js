@@ -2,7 +2,7 @@
  * @link https://tailwindcss.com/docs/controlling-file-size/#setting-up-purgecss
  */
 const purgecss = require("@fullhuman/postcss-purgecss")({
-  content: ["./src/**/*.vue"],
+  content: ["./src/**/*.vue", "./src/**/*.pug"],
   defaultExtractor: content => content.match(/[\w-/:]+(?<!:)/g) || []
 });
 
