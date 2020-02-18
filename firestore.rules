@@ -11,7 +11,7 @@ service cloud.firestore {
       return uid in get(/databases/$(database)/documents/settings/user-whitelist).data.admins
     }
 
-    function isLoggedInAndActive() {
+    function isLoggedInAdmin() {
     	return isLoggedIn() && isAdmin(request.auth.uid)
     }
 
@@ -63,12 +63,12 @@ service cloud.firestore {
       // an authenticated user can create/update/delete decisions as long as they
       // provide their uid and a valid vin in the document
       allow create, update: if isDecisionCollection(collection)
-      	&& isLoggedInAndActive()
+      	&& isLoggedInAdmin()
         && request.resource.data.uid == request.auth.uid
         && vinExists(request.resource.data.vin)
 
       allow delete: if isDecisionCollection(collection)
-      	&& isLoggedInAndActive()
+      	&& isLoggedInAdmin()
         && resource.data.uid == request.auth.uid
     }
   }
