@@ -8,4 +8,4 @@ export const REQUEST_CONCURRENCY = 3;
  */
 export const MINIMUM_MILEAGE = 150;
 
-export const TOPIC_NEW_LISTINGS = "New Listings";
+export const TOPIC_NEW_LISTINGS = "new-listings";
