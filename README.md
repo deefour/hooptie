@@ -85,7 +85,7 @@ Some Web Push impelementations support clicking through to a destination URL. Th
 This application URL needs to be configured under the `app.url` key.
 
 ```bash
-firebase functions:config:set app.url:"[full application url here]"
+firebase functions:config:set app.url="[full application url here]"
 ```
 
 #### Google Maps services API key
