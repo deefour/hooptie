@@ -8,7 +8,9 @@
           strong Showing:
           ul
             listing-rejector.rejector(v-for="rejector in rejectors" :key="rejector.id" :rejector="rejector")
-        p.no-listings(v-if="preparedListings.length === 0") No listings match the remaining filters.
+        p.no-listings(v-if="preparedListings.length === 0")
+          span(v-if="allListingsHaveBeenReviewed") #[b All set!] There are no more listings to review.
+          span(v-else) No listings match the applied filters.
         table.w-full(v-else)
           thead
             tr
@@ -39,7 +41,11 @@ export default Vue.extend({
 
   computed: {
     ...mapState(["error", "listings"]),
-    ...mapGetters(["hasListings", "isFavorited"]),
+    ...mapGetters([
+      "hasListings",
+      "isFavorited",
+      "allListingsHaveBeenReviewed"
+    ]),
 
     loading(): boolean {
       return !this.error && !this.hasListings;
