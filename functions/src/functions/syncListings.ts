@@ -35,12 +35,8 @@ const sendNewListingsNotification = async (
   const payload = {
     notification: {
       title: "New Listings Available!",
-      body
-    },
-    webpush: {
-      fcm_options: {
-        link: functions.config().app.url
-      }
+      body,
+      click_action: functions.config().app.url
     }
   };
 
