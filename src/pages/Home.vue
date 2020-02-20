@@ -92,7 +92,7 @@ th {
 }
 
 .rejectors {
-  @apply flex flex-row flex-no-wrap items-start text-sm mx-2 mt-5 mb-3;
+  @apply flex flex-row flex-no-wrap items-start text-sm mx-3 mt-5 mb-3;
 
   strong {
     @apply py-1 hidden;
