@@ -14,10 +14,14 @@ export const getters: GetterTree<RootState, RootState> = {
   isActive: state => (listing: Listing): boolean =>
     state.active === listing.vin,
   allListingsHaveBeenReviewed: state => {
-    const vins = state.listings.map(l => l.vin);
+    const vins = (docs: { vin: string }[]): string[] =>
+      docs.map(doc => doc.vin);
 
     return (
-      difference(difference(vins, state.favorited), state.trashed).length === 0
+      difference(
+        difference(vins(state.listings), vins(state.favorited)),
+        vins(state.trashed)
+      ).length === 0
     );
   }
 };
