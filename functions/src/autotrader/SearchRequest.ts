@@ -53,7 +53,7 @@ export default class SearchRequest implements ServiceRequest {
       maxPrice: this.vehicle.max_price,
       searchRadius: this.vehicle.radius,
       sortBy: this.sortBy,
-      trimCodeList: this.trimCodes().join("|"),
+      trimCodeList: this.trimCodes().join(","),
       startYear: this.vehicle.min_year,
       endYear: this.vehicle.max_year
     };
