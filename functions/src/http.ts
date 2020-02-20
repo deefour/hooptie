@@ -2,7 +2,7 @@
 const ky = require("ky-universal");
 
 const requestToConsole = (request: Request): void =>
-  console.log(`${request.method}: ${request.url.substr(0, 50)}...`);
+  console.log(`${request.method}: ${request.url}`);
 
 export default ky.extend({
   hooks: {
