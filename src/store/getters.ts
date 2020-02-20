@@ -1,7 +1,8 @@
-import { Decision, Listing, RootState } from "~/types";
+import { Decision, Listing, ListingRejector, RootState } from "~/types";
+import { difference, reject } from "lodash";
+import rejectors, { createRejectorForVehicle } from "~/rejectors";
 
 import { GetterTree } from "vuex";
-import { difference } from "lodash";
 
 export const getters: GetterTree<RootState, RootState> = {
   isAuthenticated: (_: RootState, getters) => !getters.isAnonymous,
@@ -23,7 +24,27 @@ export const getters: GetterTree<RootState, RootState> = {
         vins(state.trashed)
       ).length === 0
     );
-  }
+  },
+  rejectors: (state): ListingRejector[] => {
+    const allRejectors: ListingRejector[] = [...rejectors];
+
+    // now build rejectors for each vehicle
+    allRejectors.push(...state.vehicles.map(createRejectorForVehicle));
+
+    return allRejectors;
+  },
+
+  activeRejectors: (state, getters): ListingRejector[] =>
+    getters.rejectors.filter((rejector: ListingRejector) =>
+      state.rejectors.includes(rejector.id)
+    ),
+
+  filteredListings: (state, getters): Listing[] =>
+    getters.activeRejectors.reduce(
+      (listings: Listing[], rejector: ListingRejector) =>
+        reject(listings, rejector.filter),
+      state.listings
+    )
 };
 
 export default getters;

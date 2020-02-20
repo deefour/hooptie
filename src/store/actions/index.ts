@@ -1,10 +1,10 @@
-import { ActionTree } from "vuex";
-import { Listing, RootState } from "~/types";
+import { Listing, RootState, Vehicle } from "~/types";
 
+import { ActionTree } from "vuex";
 import { QUERY_LIMIT } from "../../constants";
-import { firestore } from "../../firebase";
 import auth from "./auth";
 import decisions from "./decisions";
+import { firestore } from "../../firebase";
 
 const actions: ActionTree<RootState, RootState> = {
   ...auth,
@@ -17,9 +17,22 @@ const actions: ActionTree<RootState, RootState> = {
     await dispatch("silentlyReauthenticate");
     await Promise.all([
       dispatch("loadListings"),
+      dispatch("loadVehicles"),
       dispatch("loadFavorited"),
       dispatch("loadTrashed")
     ]);
+  },
+
+  async loadVehicles({ commit }) {
+    const vehicles = (await firestore.collection("vehicles").get()).docs.map(
+      snapshot => snapshot.data() as Vehicle
+    );
+
+    if (vehicles.length === 0) {
+      throw new Error("No vehicles exist in the [vehicles] collection.");
+    }
+
+    commit("setVehicles", vehicles);
   },
 
   /**
@@ -28,21 +41,15 @@ const actions: ActionTree<RootState, RootState> = {
   async loadListings({ commit }) {
     commit("setListings");
 
-    try {
-      const listings: Listing[] = (
-        await firestore
-          .collection("listings")
-          .orderBy("created_at", "desc")
-          .limit(QUERY_LIMIT)
-          .get()
-      ).docs.map(snapshot => snapshot.data() as Listing);
+    const listings: Listing[] = (
+      await firestore
+        .collection("listings")
+        .orderBy("created_at", "desc")
+        .limit(QUERY_LIMIT)
+        .get()
+    ).docs.map(snapshot => snapshot.data() as Listing);
 
-      commit("setListings", listings);
-    } catch (error) {
-      console.error(error.message);
-
-      throw new Error("Could not load listings from firebase.");
-    }
+    commit("setListings", listings);
   }
 };
 

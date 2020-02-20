@@ -7,5 +7,6 @@ export default {
   trashed: [],
   error: undefined,
   active: undefined,
-  rejectors: ["trashed"]
+  rejectors: ["trashed"],
+  vehicles: []
 } as RootState;

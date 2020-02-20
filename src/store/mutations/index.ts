@@ -1,6 +1,6 @@
-import { MutationTree } from "vuex";
-import { Listing, RootState } from "~/types";
+import { Listing, RootState, Vehicle } from "~/types";
 
+import { MutationTree } from "vuex";
 import decisions from "./decisions";
 
 const mutations: MutationTree<RootState> = {
@@ -24,6 +24,10 @@ const mutations: MutationTree<RootState> = {
 
   setListings(state, listings: Listing[] = []) {
     state.listings = listings;
+  },
+
+  setVehicles(state, vehicles: Vehicle[] = []) {
+    state.vehicles = vehicles;
   },
 
   setError(state, error?: Error) {

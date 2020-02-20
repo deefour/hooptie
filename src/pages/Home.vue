@@ -25,26 +25,21 @@
 <script lang="ts">
 import Vue from "vue";
 import ListingSummary from "../components/ListingSummary.vue";
-import { Listing } from "../types";
+import { Listing, ListingRejector as Rejector } from "../types";
 import { mapState, mapGetters } from "vuex";
 import { firestore } from "firebase";
 import { reject } from "lodash";
-import rejectors from "../rejectors";
 import ListingRejector from "../components/ListingRejector.vue";
 
 export default Vue.extend({
-  data() {
-    return {
-      rejectors
-    };
-  },
-
   computed: {
     ...mapState(["error", "listings"]),
     ...mapGetters([
       "hasListings",
       "isFavorited",
-      "allListingsHaveBeenReviewed"
+      "allListingsHaveBeenReviewed",
+      "rejectors",
+      "filteredListings"
     ]),
 
     loading(): boolean {
@@ -52,30 +47,19 @@ export default Vue.extend({
     },
 
     preparedListings(): Listing[] {
-      const activeRejectors = this.rejectors.filter(({ id }) =>
-        this.$store.state.rejectors.includes(id)
-      );
+      return [...this.filteredListings].sort(
+        (a: Listing, b: Listing): number => {
+          if (this.isFavorited(a)) {
+            return -1;
+          }
 
-      // apply the rejectors
-      const filteredListings = activeRejectors.reduce(
-        (listings, rejector) => reject(listings, rejector.filter),
-        this.listings
-      );
+          if (this.isFavorited(b)) {
+            return 1;
+          }
 
-      // push favorited listings to the top
-      filteredListings.sort((a: Listing, b: Listing): number => {
-        if (this.isFavorited(a)) {
-          return -1;
+          return 0;
         }
-
-        if (this.isFavorited(b)) {
-          return 1;
-        }
-
-        return 0;
-      });
-
-      return filteredListings;
+      );
     }
   },
 
