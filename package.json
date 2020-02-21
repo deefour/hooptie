@@ -49,7 +49,7 @@
     "pretty-quick": "^2.0.1",
     "pug": "^2.0.4",
     "tslint": "^6.0.0",
-    "typescript": "^3.7.5",
+    "typescript": "^3.8.2",
     "vue-hot-reload-api": "^2.3.4",
     "vue-template-compiler": "^2.6.11"
   },
