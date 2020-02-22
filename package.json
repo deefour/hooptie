@@ -54,6 +54,8 @@
     "vue-template-compiler": "^2.6.11"
   },
   "dependencies": {
+    "@bugsnag/js": "^6.5.2",
+    "@bugsnag/plugin-vue": "^6.5.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.27",
     "@fortawesome/free-solid-svg-icons": "^5.12.1",
     "@fortawesome/vue-fontawesome": "^0.1.9",

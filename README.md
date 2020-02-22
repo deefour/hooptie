@@ -54,6 +54,10 @@ Find my hooptie let's me check in once or twice a day, __immediately__ see if ne
 
 ## Deployment
 
+### Bugsnag
+
+If you'd like errors to be reported to [Bugsnag](https://bugsnag.com), create a Vue.js project through your Bugsnag account and set the API key in your production environment as `BUGSNAG_API_KEY`.
+
 ### Firebase Credentials
 
 Coming soon...
