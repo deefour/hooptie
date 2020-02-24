@@ -24,7 +24,6 @@
                 <listing-paginator></listing-paginator>
           tbody
             listing-summary(v-for="listing in preparedListings" :key="listing.vin" :listing="listing")
-
 </template>
 
 <script lang="ts">
