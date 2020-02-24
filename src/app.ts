@@ -4,8 +4,9 @@ import "babel-polyfill";
 import bugsnag from "@bugsnag/js";
 import bugsnagVue from "@bugsnag/plugin-vue";
 import Vue from "vue";
+import { isEmpty } from "lodash";
 
-if (process.env.BUGSNAG_API_KEY !== undefined) {
+if (!isEmpty(process.env.BUGSNAG_API_KEY)) {
   const bugsnagClient = bugsnag(process.env.BUGSNAG_API_KEY);
 
   bugsnagClient.use(bugsnagVue, Vue);
