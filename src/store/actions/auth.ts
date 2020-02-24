@@ -46,7 +46,10 @@ export const getCurrentUserNow = () =>
  */
 const consideredFailedAuthOnTimeout = () =>
   new Promise<firebase.User>((_, reject) =>
-    setTimeout(reject, AUTH_STATE_TIMEOUT)
+    setTimeout(
+      () => reject(`Authentication timeout after ${AUTH_STATE_TIMEOUT}ms.`),
+      AUTH_STATE_TIMEOUT
+    )
   );
 
 const actions: ActionTree<RootState, RootState> = {
@@ -60,7 +63,7 @@ const actions: ActionTree<RootState, RootState> = {
     try {
       await dispatch("authenticate");
     } catch (error) {
-      // discard the error
+      console.error(error);
     }
   },
 
@@ -90,7 +93,7 @@ const actions: ActionTree<RootState, RootState> = {
         .get()) as firebase.firestore.DocumentSnapshot<UserSettings>;
 
       if (!userSettings.exists || !(userSettings.data() || {}).active) {
-        throw new Error("Unapproved/activated account.");
+        throw new Error("Unapproved account.");
       }
     } catch (error) {
       console.error(error);
