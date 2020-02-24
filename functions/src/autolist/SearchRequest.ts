@@ -1,9 +1,8 @@
-import { stringifyUrl } from "query-string";
-
-import { baseUrl } from ".";
 import Location from "../Location";
 import { ServiceRequest } from "../types";
 import Vehicle from "../Vehicle";
+import { baseUrl } from ".";
+import { stringifyUrl } from "query-string";
 
 export default class SearchRequest implements ServiceRequest {
   constructor(
@@ -71,10 +70,15 @@ export default class SearchRequest implements ServiceRequest {
 
   url(): URL {
     return new URL(
-      stringifyUrl({
-        url: this.endpoint(),
-        query: this.searchParams()
-      })
+      stringifyUrl(
+        {
+          url: this.endpoint(),
+          query: this.searchParams()
+        },
+        {
+          arrayFormat: "bracket"
+        }
+      )
     );
   }
 }
