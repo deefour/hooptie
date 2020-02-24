@@ -15,7 +15,7 @@
           thead
             tr
               th
-              th Miles
+              th Mileage
               th Price
               th Location
           tfoot
