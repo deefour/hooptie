@@ -17,4 +17,14 @@ export const app = firebase.initializeApp({
 export default firebase;
 export const firestore = app.firestore();
 export const auth = app.auth();
-export const messaging = app.messaging();
+
+// Instantiating a firebase.messaging.Messaging instance will cause errors in
+// browsers like older Mac Safari and even more recent iOS Safari that don't
+// support WebPush.
+//
+// The export here is conditionally set because of this.
+export let messaging: firebase.messaging.Messaging | undefined = undefined;
+
+if (firebase.messaging.isSupported()) {
+  messaging = app.messaging();
+}

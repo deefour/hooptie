@@ -5,8 +5,6 @@ import {
   getCurrentUserWhenAvailable
 } from "./store/actions/auth";
 
-messaging.usePublicVapidKey(process.env.FIREBASE_WEB_PUSH_KEY_PAIR as string);
-
 const sendTokenToServer = async (uid: string, token: string) =>
   firestore
     .doc(`users/${uid}`)
@@ -24,7 +22,7 @@ const sendTokenToServer = async (uid: string, token: string) =>
  *
  * @param {User} user the user currently authenticated against Firebase
  */
-const syncPushToken = (user: User) =>
+const syncPushToken = (messaging: firebase.messaging.Messaging, user: User) => {
   messaging
     .getToken()
     .then(token => sendTokenToServer(user.uid, token))
@@ -34,30 +32,35 @@ const syncPushToken = (user: User) =>
       );
       console.error(error);
     });
+};
 
-/**
- * A promise to grab the current user. If one isn't immediately available, the
- * promise will resolve IF the user decides to login via Firebase auth observer.
- *
- * @var {Promise<User>}
- */
-const currentUser = Promise.race([
-  getCurrentUserWhenAvailable(),
-  getCurrentUserNow()
-]);
+if (messaging !== undefined) {
+  /**
+   * A promise to grab the current user. If one isn't immediately available, the
+   * promise will resolve IF the user decides to login via Firebase auth observer.
+   *
+   * @var {Promise<User>}
+   */
+  const currentUser = Promise.race([
+    getCurrentUserWhenAvailable(),
+    getCurrentUserNow()
+  ]);
 
-(async () => {
-  // wait for a user to login
-  const user = await currentUser;
+  messaging.usePublicVapidKey(process.env.FIREBASE_WEB_PUSH_KEY_PAIR as string);
 
-  // try to sync a push token with the firestore document for their account
-  syncPushToken(user);
+  (async () => {
+    // wait for a user to login
+    const user = await currentUser;
 
-  // attach a listener that will re-sync the token if an update is needed
-  messaging.onTokenRefresh(syncPushToken.bind(undefined, user));
-})();
+    // try to sync a push token with the firestore document for their account
+    syncPushToken(messaging, user);
 
-/**
- * Simply log incoming messages from the ServiceWorker.
- */
-messaging.onMessage(payload => console.log("Message received. ", payload));
+    // attach a listener that will re-sync the token if an update is needed
+    messaging.onTokenRefresh(syncPushToken.bind(undefined, messaging, user));
+  })();
+
+  /**
+   * Simply log incoming messages from the ServiceWorker.
+   */
+  messaging.onMessage(payload => console.log("Message received. ", payload));
+}
