@@ -1,9 +1,10 @@
-import { firestore, messaging, default as firebase } from "./firebase";
-import { User } from "firebase";
+import { default as firebase, firestore, messaging } from "./firebase";
 import {
   getCurrentUserNow,
   getCurrentUserWhenAvailable
 } from "./store/actions/auth";
+
+import { User } from "firebase";
 
 const sendTokenToServer = async (uid: string, token: string) =>
   firestore
