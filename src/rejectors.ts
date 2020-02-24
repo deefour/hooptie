@@ -28,7 +28,7 @@ export const autotrader: ListingRejector = {
 
 export const autolist: ListingRejector = {
   id: AUTOLIST,
-  name: "AutoList",
+  name: "Autolist",
   description: "Listings originating from Autolist.com",
   filter: (listing: Listing): boolean =>
     listing.service.toLowerCase() === AUTOLIST
