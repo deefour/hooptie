@@ -31,7 +31,7 @@ const transformDocumentDataToLocation = (data: LocationData): Location => {
     location: { latitude, longitude },
     city,
     state,
-    zip
+    zip_code: zip
   } = data;
 
   return new Location(latitude, longitude, city, state, zip);
