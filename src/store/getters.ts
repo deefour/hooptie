@@ -3,6 +3,7 @@ import { difference, reject } from "lodash";
 import rejectors, { createRejectorForVehicle } from "~/rejectors";
 
 import { GetterTree } from "vuex";
+import { LISTINGS_PER_PAGE } from "~/constants";
 
 export const getters: GetterTree<RootState, RootState> = {
   isAuthenticated: (_: RootState, getters) => !getters.isAnonymous,
@@ -33,6 +34,16 @@ export const getters: GetterTree<RootState, RootState> = {
 
     return allRejectors;
   },
+
+  pageOfListings: (state, getters): ListingRejector[] => {
+    const start = (state.page - 1) * LISTINGS_PER_PAGE;
+    const end = state.page * LISTINGS_PER_PAGE;
+
+    return getters.filteredListings.slice(start, end);
+  },
+
+  totalPages: (_, getters): number =>
+    Math.ceil(getters.filteredListings.length / LISTINGS_PER_PAGE),
 
   activeRejectors: (state, getters): ListingRejector[] =>
     getters.rejectors.filter((rejector: ListingRejector) =>

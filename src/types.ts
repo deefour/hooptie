@@ -23,6 +23,7 @@ export interface RootState {
   active?: string;
   rejectors: string[];
   vehicles: Vehicle[];
+  page: number;
 }
 
 export interface UserSettings extends firebase.firestore.DocumentData {

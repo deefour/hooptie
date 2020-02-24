@@ -23,6 +23,11 @@ const actions: ActionTree<RootState, RootState> = {
     ]);
   },
 
+  toggleRejector({ commit }, id: string) {
+    commit("togleRejector", id);
+    commit("setPage");
+  },
+
   async loadVehicles({ commit }) {
     const vehicles = (await firestore.collection("vehicles").get()).docs.map(
       snapshot => snapshot.data() as Vehicle
@@ -50,6 +55,7 @@ const actions: ActionTree<RootState, RootState> = {
     ).docs.map(snapshot => snapshot.data() as Listing);
 
     commit("setListings", listings);
+    commit("setPage");
   }
 };
 

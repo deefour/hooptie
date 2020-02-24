@@ -8,5 +8,6 @@ export default {
   error: undefined,
   active: undefined,
   rejectors: ["trashed"],
-  vehicles: []
+  vehicles: [],
+  page: 1
 } as RootState;

@@ -18,13 +18,19 @@
               th Miles
               th Price
               th Location
+          tfoot
+            tr
+              td(colspan="4")
+                <listing-paginator></listing-paginator>
           tbody
             listing-summary(v-for="listing in preparedListings" :key="listing.vin" :listing="listing")
+
 </template>
 
 <script lang="ts">
 import Vue from "vue";
 import ListingSummary from "../components/ListingSummary.vue";
+import ListingPaginator from "../components/ListingPaginator.vue";
 import { Listing, ListingRejector as Rejector } from "../types";
 import { mapState, mapGetters } from "vuex";
 import { firestore } from "firebase";
@@ -39,7 +45,7 @@ export default Vue.extend({
       "isFavorited",
       "allListingsHaveBeenReviewed",
       "rejectors",
-      "filteredListings"
+      "pageOfListings"
     ]),
 
     loading(): boolean {
@@ -47,25 +53,24 @@ export default Vue.extend({
     },
 
     preparedListings(): Listing[] {
-      return [...this.filteredListings].sort(
-        (a: Listing, b: Listing): number => {
-          if (this.isFavorited(a)) {
-            return -1;
-          }
-
-          if (this.isFavorited(b)) {
-            return 1;
-          }
-
-          return 0;
+      return this.pageOfListings.sort((a: Listing, b: Listing): number => {
+        if (this.isFavorited(a)) {
+          return -1;
         }
-      );
+
+        if (this.isFavorited(b)) {
+          return 1;
+        }
+
+        return 0;
+      });
     }
   },
 
   components: {
     ListingSummary,
-    ListingRejector
+    ListingRejector,
+    ListingPaginator
   }
 });
 </script>

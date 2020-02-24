@@ -48,6 +48,10 @@ const mutations: MutationTree<RootState> = {
     } else {
       state.rejectors.push(id);
     }
+  },
+
+  setPage(state, page = 1) {
+    state.page = Math.max(page, 1);
   }
 };
 
