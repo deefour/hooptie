@@ -33,4 +33,4 @@ export const MAX_MILES_WORTH_DRIVING_FOR_PICKUP = 500;
  *
  * @var {Number}
  */
-export const LISTINGS_PER_PAGE = 20;
+export const LISTINGS_PER_PAGE = 30;
