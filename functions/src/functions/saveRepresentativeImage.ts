@@ -19,7 +19,7 @@ const snapshotNeedsPhotoToBeStored = (
     return false;
   }
 
-  return data.photo_urls.length > 0;
+  return data?.photo_urls.length > 0;
 };
 
 /**
