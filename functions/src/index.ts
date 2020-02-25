@@ -15,6 +15,15 @@ export const setLocationOnListingIfMissing = functions.firestore
   .onCreate(require("./functions/setLocationOnListingIfMissing").default);
 
 /**
+ * Listening for any document in the 'listings' collection to newly be created,
+ * save a copy of the first image in the `photo_urls` array, if present, to a
+ * Firebase storage bucket.
+ **/
+export const saveRepresentativeImage = functions.firestore
+  .document("listings/{vin}")
+  .onCreate(require("./functions/saveRepresentativeImage").default);
+
+/**
  * At 5AM and 4PM Eastern Time, fetch the latest search results from supported
  * listing services, creating and updating documents in the 'listings' collection
  * in Cloud Firestore.

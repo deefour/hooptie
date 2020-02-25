@@ -1,0 +1,9 @@
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read;
+      // only the admin SDK is allowed to create files
+      allow write: if false;
+    }
+  }
+}
