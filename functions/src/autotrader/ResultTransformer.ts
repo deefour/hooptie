@@ -1,19 +1,25 @@
+import Vehicle, { Trim } from "../Vehicle";
+
 import Listing from "../Listing";
 import { MINIMUM_MILEAGE } from "../constants";
 import { SearchResult } from "./types";
 import Service from "./Service";
-import { Trim } from "../Vehicle";
 import { baseUrl } from ".";
 import { get } from "lodash";
 
 export default class ResultTransformer {
-  constructor(readonly service: Service, readonly result: SearchResult) {
+  constructor(
+    readonly service: Service,
+    readonly vehicle: Vehicle,
+    readonly result: SearchResult
+  ) {
     //
   }
 
   toListing(): Listing {
     return new Listing(
       this.service.identifier,
+      this.vehicle.identifier,
       this.result.make,
       this.result.model,
       this.result.title,

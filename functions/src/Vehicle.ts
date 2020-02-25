@@ -16,6 +16,7 @@ export class Trim {
 // the bounds/criteria of the search.
 export default class Vehicle {
   constructor(
+    readonly identifier: string,
     readonly make: string,
     readonly model: string,
     readonly trims: Trim[],
@@ -42,6 +43,7 @@ const transformDocumentDataToVehicle = (data: VehicleData): Vehicle => {
   );
 
   return new Vehicle(
+    data.identifier,
     data.make,
     data.model,
     trims,

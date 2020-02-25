@@ -1,4 +1,5 @@
 import admin = require("firebase-admin");
+
 import {
   has,
   isArray,
@@ -18,6 +19,7 @@ export default class Listing {
 
   constructor(
     readonly service: string,
+    readonly search: string,
     readonly make: string,
     readonly model: string,
     protected readonly _title: string | undefined,
@@ -45,6 +47,7 @@ export default class Listing {
   toJSON(): object {
     return {
       service: this.service,
+      search_identifier: this.search,
       make: this.make,
       model: this.model,
       price: this.price,

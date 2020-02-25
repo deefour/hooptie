@@ -1,14 +1,18 @@
+import Vehicle, { Trim } from "../Vehicle";
+
+import { Details } from "./types";
+import Listing from "../Listing";
+import { MINIMUM_MILEAGE } from "../constants";
+import Service from "./Service";
+import { baseUrl } from ".";
 import { isNil } from "lodash";
 
-import { baseUrl } from ".";
-import { MINIMUM_MILEAGE } from "../constants";
-import Listing from "../Listing";
-import { Trim } from "../Vehicle";
-import Service from "./Service";
-import { Details } from "./types";
-
 export default class ResultTransformer {
-  constructor(readonly service: Service, readonly details: Details) {
+  constructor(
+    readonly service: Service,
+    readonly vehicle: Vehicle,
+    readonly details: Details
+  ) {
     //
   }
 
@@ -27,6 +31,7 @@ export default class ResultTransformer {
   toListing(): Listing {
     return new Listing(
       this.service.identifier,
+      this.vehicle.identifier,
       this.details.make,
       this.details.model,
       this.title(),

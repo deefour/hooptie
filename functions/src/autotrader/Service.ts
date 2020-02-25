@@ -1,11 +1,11 @@
-import http from "../http";
+import { AbstractSearchService } from "../SearchService";
 import Listing from "../Listing";
 import Location from "../Location";
-import { AbstractSearchService } from "../SearchService";
-import Vehicle from "../Vehicle";
 import ResultTransformer from "./ResultTransformer";
 import SearchRequest from "./SearchRequest";
 import { SearchResult } from "./types";
+import Vehicle from "../Vehicle";
+import http from "../http";
 
 export default class Service extends AbstractSearchService {
   readonly identifier = "autotrader";
@@ -36,7 +36,7 @@ export default class Service extends AbstractSearchService {
       }).listings || [];
 
     return results.map(result =>
-      new ResultTransformer(this, result).toListing()
+      new ResultTransformer(this, vehicle, result).toListing()
     );
   }
 }

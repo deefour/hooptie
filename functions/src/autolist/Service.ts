@@ -1,15 +1,16 @@
 import * as pMap from "p-map";
 
-import { REQUEST_CONCURRENCY } from "../constants";
-import http from "../http";
+import { Details, SearchResult } from "./types";
+
+import { AbstractSearchService } from "../SearchService";
+import DetailRequest from "./DetailRequest";
 import Listing from "../Listing";
 import Location from "../Location";
-import { AbstractSearchService } from "../SearchService";
-import Vehicle from "../Vehicle";
-import DetailRequest from "./DetailRequest";
+import { REQUEST_CONCURRENCY } from "../constants";
 import ResultTransformer from "./ResultTransformer";
 import SearchRequest from "./SearchRequest";
-import { Details, SearchResult } from "./types";
+import Vehicle from "../Vehicle";
+import http from "../http";
 
 export default class Service extends AbstractSearchService {
   readonly identifier = "autolist";
@@ -43,7 +44,9 @@ export default class Service extends AbstractSearchService {
         await (await http.get(new DetailRequest(vin).url())).json(),
       { concurrency: REQUEST_CONCURRENCY }
     ).then(details =>
-      details.map(detail => new ResultTransformer(this, detail).toListing())
+      details.map(detail =>
+        new ResultTransformer(this, vehicle, detail).toListing()
+      )
     );
   }
 }
