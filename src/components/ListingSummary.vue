@@ -14,7 +14,8 @@
             li(v-text="listing.year")
             li(v-if="listing.color" v-text="listing.color" class="hidden sm:inline-block")
             li
-              code.text-red-800(v-text="listing.vin")
+              a(:href="`https://www.google.com/search?q=${listing.vin}`" target="_blank")
+                code.text-red-800(v-text="listing.vin")
             li.new-listing(v-if="isNew")
               font-awesome-icon.mr-1.opacity-75(icon="star")
               span New Listing!

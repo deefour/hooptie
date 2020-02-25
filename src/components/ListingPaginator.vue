@@ -20,7 +20,7 @@ export default Vue.extend({
     }),
     ...mapGetters(["filteredListings", "totalPages"]),
 
-    totalListings() {
+    totalListings(): number {
       return this.filteredListings.length;
     },
 

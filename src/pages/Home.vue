@@ -37,9 +37,29 @@ import { reject } from "lodash";
 import ListingRejector from "../components/ListingRejector.vue";
 
 export default Vue.extend({
+  watch: {
+    /**
+     * Whenever the listings being displayed in the table changes, ensure the
+     * current page is not suddenly 'out of bounds'.
+     *
+     * For example, if the user is on page 5 and toggles a rejector that causes
+     * the total number of results to only fill 2 pages, the 'current page' should
+     * be reset back to the page 1.
+     */
+    totalPages(newValue) {
+      if (this.currentPage > newValue) {
+        this.$store.commit("setPage", 1);
+      }
+    }
+  },
+
   computed: {
     ...mapState(["error", "listings"]),
+    ...mapState({
+      currentPage: "page"
+    }),
     ...mapGetters([
+      "totalPages",
       "hasListings",
       "isFavorited",
       "allListingsHaveBeenReviewed",
