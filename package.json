@@ -34,7 +34,7 @@
     "@fullhuman/postcss-purgecss": "^2.0.6",
     "@vue/component-compiler-utils": "^3.1.1",
     "@vue/eslint-config-prettier": "^6.0.0",
-    "@vue/eslint-config-typescript": "^5.0.1",
+    "@vue/eslint-config-typescript": "^5.0.2",
     "autoprefixer": "^9.7.4",
     "components": "^0.1.0",
     "del-cli": "^3.0.0",
