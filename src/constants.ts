@@ -24,7 +24,7 @@ export const DAYS_TO_FETCH = 10;
 /**
  * The max # of listings to fetch from firestore for display.
  */
-export const QUERY_LIMIT = 750;
+export const QUERY_LIMIT = 250;
 
 export const MAX_MILES_WORTH_DRIVING_FOR_PICKUP = 500;
 
