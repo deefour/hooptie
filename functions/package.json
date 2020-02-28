@@ -2,11 +2,11 @@
   "name": "functions",
   "scripts": {
     "build": "tsc",
-    "serve": "npx build && firebase serve --only functions",
-    "shell": "npx build && firebase functions:shell",
-    "start": "npx shell",
+    "serve": "npm run build && firebase serve --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
     "lint": "npx eslint . --ext .ts",
-    "deploy": "firebase deploy --only functions",
+    "deploy": "npm run build && firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
   "engines": {
