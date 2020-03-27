@@ -45,7 +45,7 @@
     "husky": "^4.2.3",
     "parcel-bundler": "^1.12.4",
     "postcss-nested": "^4.2.1",
-    "prettier": "^1.19.1",
+    "prettier": "^2.0.2",
     "pretty-quick": "^2.0.1",
     "pug": "^2.0.4",
     "tslint": "^6.1.0",
