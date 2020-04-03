@@ -1,7 +1,6 @@
 import admin = require("firebase-admin");
 
 import {
-  has,
   isArray,
   isEmpty,
   isNil,
@@ -85,7 +84,7 @@ export default class Listing {
       return false;
     });
 
-    if (has(data, "latitude") && has(data, "longitude")) {
+    if (!isNil(data.latitude) && !isNil(data.longitude)) {
       // if coordinates are present, swap them out for a location GeoPoint
       const { latitude, longitude, ...rest } = data;
 
