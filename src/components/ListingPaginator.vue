@@ -16,7 +16,7 @@ import { LISTINGS_PER_PAGE } from "../constants";
 export default Vue.extend({
   computed: {
     ...mapState({
-      currentPage: "page"
+      currentPage: "page",
     }),
     ...mapGetters(["filteredListings", "totalPages"]),
 
@@ -30,7 +30,7 @@ export default Vue.extend({
 
     last(): number {
       return Math.min(this.totalListings, this.first + LISTINGS_PER_PAGE - 1);
-    }
+    },
   },
 
   methods: {
@@ -40,8 +40,8 @@ export default Vue.extend({
 
     isCurrentPage(page: number): boolean {
       return this.currentPage === page;
-    }
-  }
+    },
+  },
 });
 </script>
 

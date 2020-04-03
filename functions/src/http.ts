@@ -6,6 +6,6 @@ const requestToConsole = (request: Request): void =>
 
 export default ky.extend({
   hooks: {
-    beforeRequest: [requestToConsole]
-  }
+    beforeRequest: [requestToConsole],
+  },
 });

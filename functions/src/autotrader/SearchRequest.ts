@@ -9,7 +9,7 @@ import Vehicle from "../Vehicle";
 const drivelineMapping: { [key: string]: string[] } = {
   AWD4WD: ["awd", "4wd", "4x4"],
   FWD: ["fwd"],
-  RWD: ["rwd"]
+  RWD: ["rwd"],
 };
 
 export default class SearchRequest implements ServiceRequest {
@@ -25,14 +25,14 @@ export default class SearchRequest implements ServiceRequest {
 
   driveGroups(): string[] {
     return keys(
-      pickBy(drivelineMapping, pool =>
+      pickBy(drivelineMapping, (pool) =>
         intersection(pool, this.vehicle.drivelines)
       )
     );
   }
 
   engineCylinders(): string[] {
-    return this.vehicle.cylinders.map(c => `${c}CLDR`);
+    return this.vehicle.cylinders.map((c) => `${c}CLDR`);
   }
 
   startingRecord(): number {
@@ -55,7 +55,7 @@ export default class SearchRequest implements ServiceRequest {
       sortBy: this.sortBy,
       trimCodeList: this.trimCodes().join(","),
       startYear: this.vehicle.min_year,
-      endYear: this.vehicle.max_year
+      endYear: this.vehicle.max_year,
     };
   }
 
@@ -67,14 +67,14 @@ export default class SearchRequest implements ServiceRequest {
     return new URL(
       stringifyUrl({
         url: this.endpoint(),
-        query: this.searchParams()
+        query: this.searchParams(),
       })
     );
   }
 
   trimCodes(): string[] {
     return this.vehicle.trims.map(
-      trim => `${this.vehicle.autotrader.model}|${trim.name}`
+      (trim) => `${this.vehicle.autotrader.model}|${trim.name}`
     );
   }
 }

@@ -4,7 +4,7 @@ import {
   faHeart,
   faStar,
   faTimes,
-  faTrash
+  faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import Vue from "vue";

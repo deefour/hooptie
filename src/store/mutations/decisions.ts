@@ -24,7 +24,7 @@ const mutations: MutationTree<RootState> = {
 
   setFavorited(state, favorited: Decision[] = []) {
     state.favorited = favorited;
-  }
+  },
 };
 
 export default mutations;

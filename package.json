@@ -7,7 +7,7 @@
     "clean": "yarn del-cli {dist,.cache}",
     "build": "yarn clean && yarn parcel build src/index.pug src/firebase-messaging-sw.js; cp _redirects dist/",
     "watch": "yarn parcel serve src/index.pug src/firebase-messaging-sw.js",
-    "format": "yarn prettier --write '{./*,./{src,functions}/**/*}.{js,ts,css,json,vue}'",
+    "format": "yarn prettier --write './*.{js,json}' './{src,functions}/**/*.{js,ts,css,json,vue}'",
     "check": "yarn tsc --noEmit --project .",
     "lint": "yarn check && yarn eslint . --ext .ts",
     "deploy:rules": "firebase deploy --only firestore:rules"

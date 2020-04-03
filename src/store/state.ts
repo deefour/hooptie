@@ -9,5 +9,5 @@ export default {
   active: undefined,
   rejectors: ["trashed"],
   vehicles: [],
-  page: 1
+  page: 1,
 } as RootState;

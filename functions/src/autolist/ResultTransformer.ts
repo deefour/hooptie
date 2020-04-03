@@ -22,9 +22,9 @@ export default class ResultTransformer {
     return [
       this.details.make,
       this.details.model,
-      trim !== undefined ? trim.name : undefined
+      trim !== undefined ? trim.name : undefined,
     ]
-      .filter(p => !isNil(p))
+      .filter((p) => !isNil(p))
       .join(" ");
   }
 
@@ -75,7 +75,7 @@ export default class ResultTransformer {
       return [];
     }
 
-    return this.details.photo_urls.map(url => new URL(url));
+    return this.details.photo_urls.map((url) => new URL(url));
   }
 
   price(): number | undefined {

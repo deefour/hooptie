@@ -39,12 +39,12 @@ export default class Service extends AbstractSearchService {
       }).records || [];
 
     return pMap(
-      results.map(r => r.vin),
+      results.map((r) => r.vin),
       async (vin: string): Promise<Details> =>
         await (await http.get(new DetailRequest(vin).url())).json(),
       { concurrency: REQUEST_CONCURRENCY }
-    ).then(details =>
-      details.map(detail =>
+    ).then((details) =>
+      details.map((detail) =>
         new ResultTransformer(this, vehicle, detail).toListing()
       )
     );

@@ -12,10 +12,10 @@ const AUTH_STATE_TIMEOUT = 2500;
  * as the handler fires with a user.
  */
 export const getCurrentUserWhenAvailable = () =>
-  new Promise<firebase.User>(resolve => {
+  new Promise<firebase.User>((resolve) => {
     let isFulfilled = false;
 
-    auth.onAuthStateChanged(user => {
+    auth.onAuthStateChanged((user) => {
       if (isFulfilled || user === null) {
         return;
       }
@@ -33,7 +33,7 @@ export const getCurrentUserWhenAvailable = () =>
  * This promise will never reject.
  */
 export const getCurrentUserNow = () =>
-  new Promise<firebase.User>(resolve => {
+  new Promise<firebase.User>((resolve) => {
     if (auth.currentUser !== null) {
       resolve(auth.currentUser);
     }
@@ -75,7 +75,7 @@ const actions: ActionTree<RootState, RootState> = {
       const user = await Promise.race<firebase.User>([
         getCurrentUserNow(),
         getCurrentUserWhenAvailable(),
-        consideredFailedAuthOnTimeout()
+        consideredFailedAuthOnTimeout(),
       ]);
 
       commit("setUser", user);
@@ -108,7 +108,7 @@ const actions: ActionTree<RootState, RootState> = {
   async signOut({ commit }) {
     commit("setUser");
     await auth.signOut();
-  }
+  },
 };
 
 export default actions;

@@ -17,7 +17,7 @@ export default class SearchRequest implements ServiceRequest {
   searchParams(): { [key: string]: any } {
     return {
       page: this.page,
-      driveline: this.vehicle.drivelines.map(d => d.toUpperCase()),
+      driveline: this.vehicle.drivelines.map((d) => d.toUpperCase()),
       engine_cylinders: this.vehicle.cylinders,
       latitude: this.location.latitude,
       longitude: this.location.longitude,
@@ -29,9 +29,9 @@ export default class SearchRequest implements ServiceRequest {
       price_max: this.maxPrice(),
       radius: this.radius(),
       sort_filter: this.sortBy,
-      trim: this.vehicle.trims.map(t => t.name),
+      trim: this.vehicle.trims.map((t) => t.name),
       year_min: this.vehicle.min_year,
-      year_max: this.maxYear()
+      year_max: this.maxYear(),
     };
   }
 
@@ -73,10 +73,10 @@ export default class SearchRequest implements ServiceRequest {
       stringifyUrl(
         {
           url: this.endpoint(),
-          query: this.searchParams()
+          query: this.searchParams(),
         },
         {
-          arrayFormat: "bracket"
+          arrayFormat: "bracket",
         }
       )
     );

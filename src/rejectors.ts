@@ -2,7 +2,7 @@ import {
   AUTOLIST,
   AUTOTRADER,
   MAX_MILES_WORTH_DRIVING_FOR_PICKUP,
-  MILE_AS_METERS
+  MILE_AS_METERS,
 } from "./constants";
 import { Listing, ListingRejector, Vehicle } from "./types";
 
@@ -15,7 +15,7 @@ export const trashed: ListingRejector = {
   id: TRASHED,
   name: "Trashed",
   description: "Listings that have been previously dismissed",
-  filter: (listing: Listing) => store.getters.isTrashed(listing)
+  filter: (listing: Listing) => store.getters.isTrashed(listing),
 };
 
 export const autotrader: ListingRejector = {
@@ -23,7 +23,7 @@ export const autotrader: ListingRejector = {
   name: "AutoTrader",
   description: "Listings originating from AutoTrader.com",
   filter: (listing: Listing): boolean =>
-    listing.service.toLowerCase() === AUTOTRADER
+    listing.service.toLowerCase() === AUTOTRADER,
 };
 
 export const autolist: ListingRejector = {
@@ -31,7 +31,7 @@ export const autolist: ListingRejector = {
   name: "Autolist",
   description: "Listings originating from Autolist.com",
   filter: (listing: Listing): boolean =>
-    listing.service.toLowerCase() === AUTOLIST
+    listing.service.toLowerCase() === AUTOLIST,
 };
 
 export const tooFar: ListingRejector = {
@@ -47,7 +47,7 @@ export const tooFar: ListingRejector = {
     return (
       listing.distance > MAX_MILES_WORTH_DRIVING_FOR_PICKUP * MILE_AS_METERS
     );
-  }
+  },
 };
 
 /**
@@ -63,7 +63,7 @@ export const createRejectorForVehicle = (
   name: vehicle.title,
   description: `Listings for the '${vehicle.description}' vehicle search`,
   filter: (listing: Listing): boolean =>
-    listing.search_identifier === vehicle.identifier
+    listing.search_identifier === vehicle.identifier,
 });
 
 /**

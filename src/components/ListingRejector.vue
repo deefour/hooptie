@@ -13,21 +13,21 @@ export default Vue.extend({
   props: {
     rejector: {
       type: Object as () => ListingRejector,
-      required: true
-    }
+      required: true,
+    },
   },
 
   computed: {
     isActive(): boolean {
       return this.$store.state.rejectors.includes(this.rejector.id);
-    }
+    },
   },
 
   methods: {
     toggle() {
       this.$store.commit("toggleRejector", this.rejector.id);
-    }
-  }
+    },
+  },
 });
 </script>
 

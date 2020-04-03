@@ -24,12 +24,12 @@ import ErrorMessage from "./ErrorMessage.vue";
 
 export default Vue.extend({
   computed: {
-    ...mapGetters(["isAuthenticated"])
+    ...mapGetters(["isAuthenticated"]),
   },
 
   components: {
-    ErrorMessage
-  }
+    ErrorMessage,
+  },
 });
 </script>
 

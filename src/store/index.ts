@@ -13,5 +13,5 @@ export default new Vuex.Store<RootState>({
   state,
   getters,
   mutations,
-  actions
+  actions,
 });

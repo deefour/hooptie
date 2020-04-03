@@ -35,8 +35,8 @@ export default Vue.extend({
       loading: false,
       credentials: {
         email: "",
-        password: ""
-      }
+        password: "",
+      },
     };
   },
 
@@ -49,11 +49,11 @@ export default Vue.extend({
       if (newValue !== undefined) {
         this.autofocus();
       }
-    }
+    },
   },
 
   computed: {
-    ...mapState(["error"])
+    ...mapState(["error"]),
   },
 
   methods: {
@@ -62,7 +62,9 @@ export default Vue.extend({
     },
 
     isValid() {
-      return !Object.values(this.credentials).some(v => v.trim().length === 0);
+      return !Object.values(this.credentials).some(
+        (v) => v.trim().length === 0
+      );
     },
 
     reset() {
@@ -100,7 +102,7 @@ export default Vue.extend({
       } finally {
         this.loading = false;
       }
-    }
-  }
+    },
+  },
 });
 </script>

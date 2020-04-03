@@ -7,17 +7,17 @@ import { LISTINGS_PER_PAGE } from "~/constants";
 
 export const getters: GetterTree<RootState, RootState> = {
   isAuthenticated: (_: RootState, getters) => !getters.isAnonymous,
-  isAnonymous: state => state.user === undefined,
-  hasListings: state => state.listings.length > 0,
-  isFavorited: state => (listing: Listing): boolean =>
+  isAnonymous: (state) => state.user === undefined,
+  hasListings: (state) => state.listings.length > 0,
+  isFavorited: (state) => (listing: Listing): boolean =>
     state.favorited.some((f: Decision) => f.vin === listing.vin),
-  isTrashed: state => (listing: Listing): boolean =>
+  isTrashed: (state) => (listing: Listing): boolean =>
     state.trashed.some((f: Decision) => f.vin === listing.vin),
-  isActive: state => (listing: Listing): boolean =>
+  isActive: (state) => (listing: Listing): boolean =>
     state.active === listing.vin,
-  allListingsHaveBeenReviewed: state => {
+  allListingsHaveBeenReviewed: (state) => {
     const vins = (docs: { vin: string }[]): string[] =>
-      docs.map(doc => doc.vin);
+      docs.map((doc) => doc.vin);
 
     return (
       difference(
@@ -55,7 +55,7 @@ export const getters: GetterTree<RootState, RootState> = {
       (listings: Listing[], rejector: ListingRejector) =>
         reject(listings, rejector.filter),
       state.listings
-    )
+    ),
 };
 
 export default getters;

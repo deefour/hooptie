@@ -10,13 +10,13 @@ import { mapGetters, mapState } from "vuex";
 
 export default Vue.extend({
   computed: {
-    ...mapState(["error"])
+    ...mapState(["error"]),
   },
   methods: {
     close() {
       this.$store.commit("setError");
-    }
-  }
+    },
+  },
 });
 </script>
 

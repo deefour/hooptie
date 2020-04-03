@@ -30,12 +30,12 @@ export default class Vehicle {
     readonly cylinders: number[],
     readonly autotrader: AutoTraderCode
   ) {
-    this.drivelines = drivelines.map(d => d.trim().toLowerCase());
+    this.drivelines = drivelines.map((d) => d.trim().toLowerCase());
   }
 }
 
 const transformDocumentDataToVehicle = (data: VehicleData): Vehicle => {
-  const trims = (data.trims || []).map(t => new Trim(t));
+  const trims = (data.trims || []).map((t) => new Trim(t));
 
   const autoTraderCode = new AutoTraderCode(
     data.autotrader.make,
@@ -62,10 +62,7 @@ const transformDocumentDataToVehicle = (data: VehicleData): Vehicle => {
 // getVehicles asynchronously fetchs vehicle data from the Cloud Firestore, returning
 // an array of Vehicle instances for use in search services.
 export const getVehicles = async (): Promise<Vehicle[]> => {
-  const collection = await admin
-    .firestore()
-    .collection("vehicles")
-    .get();
+  const collection = await admin.firestore().collection("vehicles").get();
 
   if (!collection.size) {
     throw new Error("No vehicles exist in the [vehicles] collection.");
@@ -73,7 +70,7 @@ export const getVehicles = async (): Promise<Vehicle[]> => {
 
   const vehicles: Vehicle[] = [];
 
-  collection.forEach(doc =>
+  collection.forEach((doc) =>
     vehicles.push(transformDocumentDataToVehicle(doc.data() as VehicleData))
   );
 

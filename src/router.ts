@@ -13,26 +13,26 @@ const routes: RouteConfig[] = [
     async beforeEnter(_, __, next) {
       await store.dispatch("signOut");
       next({ path: "/" });
-    }
+    },
   },
 
   {
     path: "/",
-    component: Home
+    component: Home,
   },
 
   {
     path: "/login",
     component: Login,
-    meta: { requiresAnonymous: true }
-  }
+    meta: { requiresAnonymous: true },
+  },
 ];
 
 const router = new VueRouter({
   mode: ["production"].includes((process.env.NODE_ENV || "local").toLowerCase())
     ? "history"
     : "hash",
-  routes
+  routes,
 });
 
 /**
@@ -43,7 +43,7 @@ const router = new VueRouter({
  */
 router.beforeEach((to, _, next) => {
   if (
-    to.matched.some(record => record.meta.requiresAuth) &&
+    to.matched.some((record) => record.meta.requiresAuth) &&
     store.getters.isAnonymous
   ) {
     next({ path: "/login" });
@@ -60,7 +60,7 @@ router.beforeEach((to, _, next) => {
  */
 router.beforeEach((to, _, next) => {
   if (
-    to.matched.some(record => record.meta.requiresAnonymous) &&
+    to.matched.some((record) => record.meta.requiresAnonymous) &&
     store.getters.isAuthenticated
   ) {
     next({ path: "/" });

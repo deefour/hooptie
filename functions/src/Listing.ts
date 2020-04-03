@@ -7,7 +7,7 @@ import {
   isNumber,
   isPlainObject,
   isString,
-  omitBy
+  omitBy,
 } from "lodash";
 
 import { SearchService } from "./types";
@@ -62,13 +62,13 @@ export default class Listing {
       transmission: this.transmission,
       trim: this.trim !== undefined ? this.trim.name : undefined,
       color: this.color,
-      images: this.images.map(image => image.toString())
+      images: this.images.map((image) => image.toString()),
     };
   }
 
   toDocumentData(): object {
     // reject keys with undefined or empty values
-    let data: { [key: string]: any } = omitBy(this.toJSON(), v => {
+    let data: { [key: string]: any } = omitBy(this.toJSON(), (v) => {
       if (isNil(v)) {
         return true;
       }
@@ -93,7 +93,7 @@ export default class Listing {
         location: new admin.firestore.GeoPoint(
           latitude as number,
           longitude as number
-        )
+        ),
       };
     }
 

@@ -79,7 +79,7 @@ export default async (
 
     const payload = {
       preview_photo_url: previewURL,
-      updated_at: admin.firestore.FieldValue.serverTimestamp()
+      updated_at: admin.firestore.FieldValue.serverTimestamp(),
     };
 
     return snapshot.ref.update(payload);

@@ -31,7 +31,7 @@ const transformDocumentDataToLocation = (data: LocationData): Location => {
     location: { latitude, longitude },
     city,
     state,
-    zip_code: zip
+    zip_code: zip,
   } = data;
 
   return new Location(latitude, longitude, city, state, zip);
@@ -40,10 +40,7 @@ const transformDocumentDataToLocation = (data: LocationData): Location => {
 // getLocation asynchronously fetch the location details from Cloud Firestore, returning
 // a Location instance for use in search services.
 export const getLocation = async (): Promise<Location> => {
-  const doc = await admin
-    .firestore()
-    .doc("settings/location")
-    .get();
+  const doc = await admin.firestore().doc("settings/location").get();
 
   if (!doc.exists) {
     throw new Error("No location document exists at [settings/location].");

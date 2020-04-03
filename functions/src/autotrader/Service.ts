@@ -35,7 +35,7 @@ export default class Service extends AbstractSearchService {
         listings: SearchResult[];
       }).listings || [];
 
-    return results.map(result =>
+    return results.map((result) =>
       new ResultTransformer(this, vehicle, result).toListing()
     );
   }

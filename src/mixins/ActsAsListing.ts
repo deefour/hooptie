@@ -7,8 +7,8 @@ export default Vue.extend({
   props: {
     listing: {
       type: Object as () => Listing,
-      required: true
-    }
+      required: true,
+    },
   },
 
   computed: {
@@ -51,7 +51,7 @@ export default Vue.extend({
       if (price > 0) {
         return new Intl.NumberFormat("en-US", {
           style: "currency",
-          currency: "USD"
+          currency: "USD",
         })
           .format(price)
           .replace(/\.\d+$/, "");
@@ -62,6 +62,6 @@ export default Vue.extend({
 
     favorited(): boolean {
       return false;
-    }
-  }
+    },
+  },
 });

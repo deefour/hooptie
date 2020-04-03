@@ -56,7 +56,7 @@ export default Vue.extend({
         favorited: this.isFavorited(this.listing),
         trashed: this.isTrashed(this.listing),
         new: this.isNew,
-        active: this.isActive(this.listing)
+        active: this.isActive(this.listing),
       };
     },
 
@@ -64,19 +64,19 @@ export default Vue.extend({
       return undefined;
 
       // return this.listing?.images?.[0];
-    }
+    },
   },
 
   methods: {
     markActive() {
       this.$store.commit("setActive", this.listing.vin);
-    }
+    },
   },
 
   components: {
     FavoriteToggle,
-    TrashToggle
-  }
+    TrashToggle,
+  },
 });
 </script>
 

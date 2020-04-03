@@ -1,7 +1,7 @@
 import { default as firebase, firestore, messaging } from "./firebase";
 import {
   getCurrentUserNow,
-  getCurrentUserWhenAvailable
+  getCurrentUserWhenAvailable,
 } from "./store/actions/auth";
 
 import { User } from "firebase";
@@ -10,9 +10,9 @@ const sendTokenToServer = async (uid: string, token: string) =>
   firestore
     .doc(`users/${uid}`)
     .update({
-      push_tokens: firebase.firestore.FieldValue.arrayUnion(token)
+      push_tokens: firebase.firestore.FieldValue.arrayUnion(token),
     })
-    .catch(error => {
+    .catch((error) => {
       console.info(`Error setting token [${token}] for user [${uid}]`);
       console.error(error);
     });
@@ -26,8 +26,8 @@ const sendTokenToServer = async (uid: string, token: string) =>
 const syncPushToken = (messaging: firebase.messaging.Messaging, user: User) => {
   messaging
     .getToken()
-    .then(token => sendTokenToServer(user.uid, token))
-    .catch(error => {
+    .then((token) => sendTokenToServer(user.uid, token))
+    .catch((error) => {
       console.info(
         "Token generation failed. Most likely the user rejected the push permission opt-in."
       );
@@ -44,7 +44,7 @@ if (messaging !== undefined) {
    */
   const currentUser = Promise.race([
     getCurrentUserWhenAvailable(),
-    getCurrentUserNow()
+    getCurrentUserNow(),
   ]);
 
   messaging.usePublicVapidKey(process.env.FIREBASE_WEB_PUSH_KEY_PAIR as string);
@@ -63,5 +63,5 @@ if (messaging !== undefined) {
   /**
    * Simply log incoming messages from the ServiceWorker.
    */
-  messaging.onMessage(payload => console.log("Message received. ", payload));
+  messaging.onMessage((payload) => console.log("Message received. ", payload));
 }

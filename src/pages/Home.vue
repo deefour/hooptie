@@ -50,13 +50,13 @@ export default Vue.extend({
       if (this.currentPage > newValue) {
         this.$store.commit("setPage", 1);
       }
-    }
+    },
   },
 
   computed: {
     ...mapState(["error", "listings"]),
     ...mapState({
-      currentPage: "page"
+      currentPage: "page",
     }),
     ...mapGetters([
       "totalPages",
@@ -64,7 +64,7 @@ export default Vue.extend({
       "isFavorited",
       "allListingsHaveBeenReviewed",
       "rejectors",
-      "pageOfListings"
+      "pageOfListings",
     ]),
 
     loading(): boolean {
@@ -83,14 +83,14 @@ export default Vue.extend({
 
         return 0;
       });
-    }
+    },
   },
 
   components: {
     ListingSummary,
     ListingRejector,
-    ListingPaginator
-  }
+    ListingPaginator,
+  },
 });
 </script>
 

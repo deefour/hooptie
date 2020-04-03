@@ -20,7 +20,7 @@ export default class DetailRequest implements ServiceRequest {
     return new URL(
       stringifyUrl({
         url: this.endpoint(),
-        query: this.searchParams()
+        query: this.searchParams(),
       })
     );
   }

@@ -1,11 +1,11 @@
 import {
   Client,
   DistanceMatrixResponse,
-  GeocodeResponse
+  GeocodeResponse,
 } from "@googlemaps/google-maps-services-js";
 import {
   AddressComponent,
-  GeocodeResult
+  GeocodeResult,
 } from "@googlemaps/google-maps-services-js/dist/common";
 import * as admin from "firebase-admin";
 import * as functions from "firebase-functions";
@@ -44,8 +44,8 @@ const getDistanceValue = async (
         params: {
           origins: [[source.lat, source.lng]],
           destinations: [[destination.lat, destination.lng]],
-          key: apiKey
-        }
+          key: apiKey,
+        },
       }
     );
 
@@ -79,8 +79,8 @@ const geocodeZipCode = async (
     geoResponse = await client.geocode({
       params: {
         address: zipCode,
-        key: apiKey
-      }
+        key: apiKey,
+      },
     });
 
     return geoResponse?.data?.results?.[0];
@@ -107,7 +107,7 @@ const getAddressType = (
 ): string | undefined => {
   const component = result.address_components.find(
     (component: AddressComponent) =>
-      component.types.some(type => type.toLowerCase() === componentType)
+      component.types.some((type) => type.toLowerCase() === componentType)
   );
 
   return component?.[attributeName];
@@ -134,15 +134,12 @@ const snapshotRequiresGeocoding = (
 const getSourceCoordinate = async (): Promise<Coordinate | undefined> => {
   try {
     const location = (
-      await admin
-        .firestore()
-        .doc("settings/location")
-        .get()
+      await admin.firestore().doc("settings/location").get()
     ).data()?.location as admin.firestore.GeoPoint;
 
     return {
       lat: location.latitude,
-      lng: location.longitude
+      lng: location.longitude,
     };
   } catch (error) {
     console.error(error);
@@ -188,7 +185,7 @@ export default async (
     distance: source
       ? await getDistanceValue(source, location, apiKey)
       : undefined,
-    updated_at: admin.firestore.FieldValue.serverTimestamp()
+    updated_at: admin.firestore.FieldValue.serverTimestamp(),
   };
 
   return snapshot.ref.update(omitBy(payload, isNil));

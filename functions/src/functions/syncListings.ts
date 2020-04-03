@@ -36,8 +36,8 @@ const sendNewListingsNotification = async (
     notification: {
       title: "New Listings Available!",
       body,
-      click_action: functions.config().app.url
-    }
+      click_action: functions.config().app.url,
+    },
   };
 
   try {
@@ -56,7 +56,7 @@ export default async (): Promise<void> => {
   console.info("Fetching location and vehicles from firestore...");
   const [location, vehicles] = await Promise.all([
     getLocation(),
-    getVehicles()
+    getVehicles(),
   ]);
 
   console.info("Creating search service instances...");
@@ -82,7 +82,7 @@ export default async (): Promise<void> => {
   try {
     // wait on all searches to complete. flatten out to a single array of Listings.
     const searchResults: Listing[][] = await pAll(deferredListingPromises, {
-      concurrency: REQUEST_CONCURRENCY
+      concurrency: REQUEST_CONCURRENCY,
     });
 
     console.info(
@@ -103,7 +103,7 @@ export default async (): Promise<void> => {
 
   try {
     const asyncOperations = Array.from(listings.values()).map<Promise<void>>(
-      async listing => {
+      async (listing) => {
         const doc = admin.firestore().doc(`listings/${listing.vin}`);
         const snapshot = await doc.get();
 
@@ -115,7 +115,7 @@ export default async (): Promise<void> => {
           );
           batch.update(doc, {
             ...listing.toDocumentData(),
-            updated_at: admin.firestore.FieldValue.serverTimestamp()
+            updated_at: admin.firestore.FieldValue.serverTimestamp(),
           });
 
           return;
@@ -128,7 +128,7 @@ export default async (): Promise<void> => {
         );
         batch.set(doc, {
           ...listing.toDocumentData(),
-          created_at: admin.firestore.FieldValue.serverTimestamp()
+          created_at: admin.firestore.FieldValue.serverTimestamp(),
         });
 
         newListingsCount++;

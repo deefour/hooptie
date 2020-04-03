@@ -18,7 +18,7 @@ const mutations: MutationTree<RootState> = {
 
     state.user = {
       uid: user.uid,
-      email: user.email
+      email: user.email,
     };
   },
 
@@ -52,7 +52,7 @@ const mutations: MutationTree<RootState> = {
 
   setPage(state, page = 1) {
     state.page = Math.max(page, 1);
-  }
+  },
 };
 
 export default mutations;

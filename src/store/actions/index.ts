@@ -19,7 +19,7 @@ const actions: ActionTree<RootState, RootState> = {
       dispatch("loadListings"),
       dispatch("loadVehicles"),
       dispatch("loadFavorited"),
-      dispatch("loadTrashed")
+      dispatch("loadTrashed"),
     ]);
   },
 
@@ -30,7 +30,7 @@ const actions: ActionTree<RootState, RootState> = {
 
   async loadVehicles({ commit }) {
     const vehicles = (await firestore.collection("vehicles").get()).docs.map(
-      snapshot => snapshot.data() as Vehicle
+      (snapshot) => snapshot.data() as Vehicle
     );
 
     if (vehicles.length === 0) {
@@ -52,11 +52,11 @@ const actions: ActionTree<RootState, RootState> = {
         .orderBy("created_at", "desc")
         .limit(QUERY_LIMIT)
         .get()
-    ).docs.map(snapshot => snapshot.data() as Listing);
+    ).docs.map((snapshot) => snapshot.data() as Listing);
 
     commit("setListings", listings);
     commit("setPage");
-  }
+  },
 };
 
 export default actions;

@@ -11,8 +11,8 @@ export default Vue.extend({
   props: {
     listing: {
       type: Object as () => Listing,
-      required: true
-    }
+      required: true,
+    },
   },
 
   computed: {
@@ -21,7 +21,7 @@ export default Vue.extend({
 
     isEnabled(): boolean {
       return this.isAuthenticated && !this.isTrashed(this.listing);
-    }
+    },
   },
 
   methods: {
@@ -32,10 +32,10 @@ export default Vue.extend({
 
       this.$store.dispatch("toggleFavorite", {
         vin: this.listing.vin,
-        uid: this.user.uid
+        uid: this.user.uid,
       });
-    }
-  }
+    },
+  },
 });
 </script>
 

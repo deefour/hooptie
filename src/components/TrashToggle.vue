@@ -11,23 +11,23 @@ export default Vue.extend({
   props: {
     listing: {
       type: Object as () => Listing,
-      required: true
-    }
+      required: true,
+    },
   },
 
   computed: {
     ...mapState(["user"]),
-    ...mapGetters(["isTrashed"])
+    ...mapGetters(["isTrashed"]),
   },
 
   methods: {
     toggle() {
       this.$store.dispatch("toggleTrashed", {
         vin: this.listing.vin,
-        uid: this.user.uid
+        uid: this.user.uid,
       });
-    }
-  }
+    },
+  },
 });
 </script>
 

@@ -13,7 +13,7 @@ const loadDecisions = async <S, R>(
   const docs: Decision[] = [];
 
   try {
-    (await firestore.collection(collection).get()).docs.forEach(snapshot =>
+    (await firestore.collection(collection).get()).docs.forEach((snapshot) =>
       docs.push(snapshot.data() as Decision)
     );
   } catch (error) {
@@ -56,7 +56,7 @@ const toggleDecision = async (
     commit(removeMutation, payload);
 
     try {
-      results.forEach(doc =>
+      results.forEach((doc) =>
         promises.push(firestore.doc(`${collection}/${doc.id}`).delete())
       );
 
@@ -100,7 +100,7 @@ const actions: ActionTree<RootState, RootState> = {
 
   loadFavorited($store) {
     return loadDecisions($store, "favorited", "setFavorited");
-  }
+  },
 };
 
 export default actions;
