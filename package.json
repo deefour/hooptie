@@ -55,7 +55,7 @@
   },
   "dependencies": {
     "@bugsnag/js": "^6.5.2",
-    "@bugsnag/plugin-vue": "^6.5.0",
+    "@bugsnag/plugin-vue": "^7.0.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
     "@fortawesome/free-solid-svg-icons": "^5.13.0",
     "@fortawesome/vue-fontawesome": "^0.1.9",
