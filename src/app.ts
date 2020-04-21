@@ -1,15 +1,16 @@
 import "./app.css";
 import "./icons";
 import "babel-polyfill";
-import bugsnag from "@bugsnag/js";
-import bugsnagVue from "@bugsnag/plugin-vue";
+import Bugsnag from "@bugsnag/js";
+import BugsnagPluginVue from "@bugsnag/plugin-vue";
 import Vue from "vue";
 import { isEmpty } from "lodash";
 
 if (!isEmpty(process.env.BUGSNAG_API_KEY)) {
-  const bugsnagClient = bugsnag(process.env.BUGSNAG_API_KEY);
-
-  bugsnagClient.use(bugsnagVue, Vue);
+  Bugsnag.start({
+    apiKey: process.env.BUGSNAG_API_KEY as string,
+    plugins: [new BugsnagPluginVue(Vue)]
+  });
 }
 
 import App from "./components/App.vue";
