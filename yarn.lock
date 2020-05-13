@@ -778,10 +778,10 @@
     pump "^3.0.0"
     stack-generator "^2.0.3"
 
-"@bugsnag/plugin-vue@^7.0.1":
-  version "7.0.1"
-  resolved "https://registry.yarnpkg.com/@bugsnag/plugin-vue/-/plugin-vue-7.0.1.tgz#37103a2552460d5e4366d89e1645fdd9a956ca15"
-  integrity sha512-GgzVE3sJbdLcjODd7+scVHoW91aVYk8VE3//mKOkMyPKk2ksfUP/f0wbwcOsUtg7LiySVXt8PI4hpTlLXL288Q==
+"@bugsnag/plugin-vue@^7.0.2":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@bugsnag/plugin-vue/-/plugin-vue-7.0.2.tgz#68047208d5607cda598dd4a371e07284850cd8d5"
+  integrity sha512-NHQWxNFamthvhOSUqmLQEso6rL0uaTb50/3S9+25dyUCfPfCuhBYZn2NJeZkBKfVnJlgLn1VdpAJYxYhOi3EiA==
 
 "@firebase/analytics-types@0.3.0":
   version "0.3.0"
