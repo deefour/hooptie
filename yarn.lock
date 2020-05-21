@@ -797,10 +797,12 @@
     pump "^3.0.0"
     stack-generator "^2.0.3"
 
-"@bugsnag/plugin-vue@^7.0.2":
-  version "7.0.2"
-  resolved "https://registry.yarnpkg.com/@bugsnag/plugin-vue/-/plugin-vue-7.0.2.tgz#68047208d5607cda598dd4a371e07284850cd8d5"
-  integrity sha512-NHQWxNFamthvhOSUqmLQEso6rL0uaTb50/3S9+25dyUCfPfCuhBYZn2NJeZkBKfVnJlgLn1VdpAJYxYhOi3EiA==
+"@bugsnag/plugin-vue@^7.1.0":
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/plugin-vue/-/plugin-vue-7.1.0.tgz#cb82864f43ad1bb3a5365bb35dfad33e57f914b7"
+  integrity sha512-Lat1i0gazLW+lkF6seEb7o9IkDw6S/6H+Qd02dr6IbW3IBDk5ksQFcjCVTzHpPxQBBUfIJ443pIRaBg9y1EoBw==
+  dependencies:
+    "@bugsnag/core" "^7.1.0"
 
 "@bugsnag/safe-json-stringify@^5.0.0":
   version "5.0.0"
