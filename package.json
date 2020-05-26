@@ -47,7 +47,7 @@
     "postcss-nested": "^4.2.1",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
-    "pug": "^2.0.4",
+    "pug": "^3.0.0",
     "tslint": "^6.1.2",
     "typescript": "^3.9.3",
     "vue-hot-reload-api": "^2.3.4",
