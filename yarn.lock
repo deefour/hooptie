@@ -7289,10 +7289,10 @@ vue-hot-reload-api@^2.3.4:
   resolved "https://registry.yarnpkg.com/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
 
-vue-router@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.2.0.tgz#da35195ffe37fdf0bec9f5f8f72781d2a7718815"
-  integrity sha512-khkrcUIzMcI1rDcNtqkvLwfRFzB97GmJEsPAQdj7t/VvpGhmXLOkUfhc+Ah8CvpSXGXwuWuQO+x8Sy/xDhXZIA==
+vue-router@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-3.3.0.tgz#752905ef1ce210626834f6fa44e6fdcb11e4f262"
+  integrity sha512-Y0qw0vFdX1kK7fMfi66hiyIdFGcQX+UTiX4Y+ZlklzXnObbH57q7n50Ad7O0BKMaZ/8xvB8AR6i8+1LRxRFiEg==
 
 vue-template-compiler@^2.6.11:
   version "2.6.11"
