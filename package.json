@@ -31,7 +31,7 @@
   },
   "homepage": "https://hooptie.deefour.me",
   "devDependencies": {
-    "@fullhuman/postcss-purgecss": "^2.2.0",
+    "@fullhuman/postcss-purgecss": "^2.3.0",
     "@vue/component-compiler-utils": "^3.1.2",
     "@vue/eslint-config-prettier": "^6.0.0",
     "@vue/eslint-config-typescript": "^5.0.2",
