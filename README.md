@@ -135,16 +135,6 @@ These codes can be seen in the URL querystring when you go to AutoTrader.com and
 
     ...?makeCodeList=JEEP&modelCodeList=JEEPGRAND&...
 
-### The `listings` collection
-
-A `listings` collection will be auto-generated the first time the [syncListings()]() job runs.
-
-A composite index needs to be created on this collection:
-
- - __Collection ID:__ `listings`
- - __Fields Indexed:__ `search_identifier` Ascending, `created_at` Descending
- - __Query scope:__ Collection
-
 <a name="admin-users"></a>
 ## Admin Users
 
