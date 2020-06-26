@@ -9,7 +9,7 @@ import { isEmpty } from "lodash";
 if (!isEmpty(process.env.BUGSNAG_API_KEY)) {
   Bugsnag.start({
     apiKey: process.env.BUGSNAG_API_KEY as string,
-    plugins: [new BugsnagPluginVue(Vue)]
+    plugins: [new BugsnagPluginVue(Vue)],
   });
 }
 
