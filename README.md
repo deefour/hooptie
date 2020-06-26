@@ -227,10 +227,6 @@ Learn more about [configuring web credentials with FCM](https://firebase.google.
 
 #### Publishing
 
-With the above configuration in place, deploy the functions by running the following command:
-
-```bash
-firebase deploy --only functions
-```
+With the above configuration in place, run `firebase deploy` to deploy the backend app to firebase.
 
 (c) 2020 Jason Daly (jason@deefour.me)
