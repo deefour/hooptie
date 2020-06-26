@@ -79,7 +79,15 @@ export default class ResultTransformer {
       return [];
     }
 
-    return this.result.images.sources.map(({ src: url }) => new URL(url));
+    return this.result.images.sources.map(({ src: url }) => {
+      // When autotrader image urls come through as //images.autotrader.com/...,
+      // a protocol should be prepended.
+      if (/^\/\//.test(url)) {
+        url = `https:${url}`;
+      }
+
+      return new URL(url);
+    });
   }
 
   price(): number | undefined {
