@@ -1,10 +1,10 @@
+import { ActionTree } from "vuex";
 import { Listing, RootState, Vehicle } from "~/types";
 
-import { ActionTree } from "vuex";
 import { QUERY_LIMIT } from "../../constants";
+import { firestore } from "../../firebase";
 import auth from "./auth";
 import decisions from "./decisions";
-import { firestore } from "../../firebase";
 
 const actions: ActionTree<RootState, RootState> = {
   ...auth,
@@ -15,23 +15,27 @@ const actions: ActionTree<RootState, RootState> = {
    */
   async boot({ dispatch }) {
     await dispatch("silentlyReauthenticate");
+
     await Promise.all([
-      dispatch("loadListings"),
       dispatch("loadVehicles"),
       dispatch("loadFavorited"),
       dispatch("loadTrashed"),
     ]);
+
+    // listings can only be loaded after vehicle data has been fetched. the listings
+    // collection query relies on the search_identifier fields from the vehicle data.
+    await dispatch("loadListings");
   },
 
   toggleRejector({ commit }, id: string) {
-    commit("togleRejector", id);
+    commit("toggleRejector", id);
     commit("setPage");
   },
 
   async loadVehicles({ commit }) {
-    const vehicles = (await firestore.collection("vehicles").get()).docs.map(
-      (snapshot) => snapshot.data() as Vehicle
-    );
+    const vehicles = (
+      await firestore.collection("vehicles").where("active", "==", true).get()
+    ).docs.map((snapshot) => snapshot.data() as Vehicle);
 
     if (vehicles.length === 0) {
       throw new Error("No vehicles exist in the [vehicles] collection.");
@@ -43,12 +47,26 @@ const actions: ActionTree<RootState, RootState> = {
   /**
    * Fetch listings from firebase.
    */
-  async loadListings({ commit }) {
+  async loadListings({ commit, state }) {
     commit("setListings");
+
+    const searchIdentifiers = state.vehicles.reduce(
+      (acc, vehicle: Vehicle) => acc.add(vehicle.identifier),
+      new Set()
+    );
+
+    if (searchIdentifiers.size === 0) {
+      throw new Error("Each vehicle must have a [identifier] field.");
+    }
 
     const listings: Listing[] = (
       await firestore
         .collection("listings")
+        .where(
+          "search_identifier",
+          "in",
+          Array.from(searchIdentifiers.values())
+        )
         .orderBy("created_at", "desc")
         .limit(QUERY_LIMIT)
         .get()

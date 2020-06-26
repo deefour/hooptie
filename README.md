@@ -78,6 +78,7 @@ A document must exist in the `vehicles` collection for each search to be perform
 
 ```json
 {
+  "active": true,
   "autotrader": {
     "make": "SUB",
     "model": "SUBOUTBK"
@@ -119,6 +120,7 @@ Here is a complete list of __required__ attributes:
  - `title`
  - `make`
  - `model`
+ - `active` *(boolean)*: should the vehicle appear in the UI and searches be performed against the listing services?
 
 <a name="the-autotrader-attribute"></a>
 #### The `autotrader` Attribute
@@ -132,6 +134,16 @@ AutoTrader.com uses a special `make` and `model` code to match specific vehicles
 These codes can be seen in the URL querystring when you go to AutoTrader.com and perform a search under `"makeCodeList"` and `"modelCodeList"`. For example
 
     ...?makeCodeList=JEEP&modelCodeList=JEEPGRAND&...
+
+### The `listings` collection
+
+A `listings` collection will be auto-generated the first time the [syncListings()]() job runs.
+
+A composite index needs to be created on this collection:
+
+ - __Collection ID:__ `listings`
+ - __Fields Indexed:__ `search_identifier` Ascending, `created_at` Descending
+ - __Query scope:__ Collection
 
 <a name="admin-users"></a>
 ## Admin Users

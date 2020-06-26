@@ -59,10 +59,14 @@ const transformDocumentDataToVehicle = (data: VehicleData): Vehicle => {
   );
 };
 
-// getVehicles asynchronously fetchs vehicle data from the Cloud Firestore, returning
-// an array of Vehicle instances for use in search services.
+// getVehicles asynchronously fetches ACTIVE vehicle data from the Cloud Firestore,
+// returning an array of Vehicle instances for use in search services.
 export const getVehicles = async (): Promise<Vehicle[]> => {
-  const collection = await admin.firestore().collection("vehicles").get();
+  const collection = await admin
+    .firestore()
+    .collection("vehicles")
+    .where("active", "==", true)
+    .get();
 
   if (!collection.size) {
     throw new Error("No vehicles exist in the [vehicles] collection.");
