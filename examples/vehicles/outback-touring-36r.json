@@ -1,0 +1,16 @@
+{
+  "autotrader": {
+    "make": "SUB",
+    "model": "SUBOUTBK"
+  },
+  "cylinders": [6],
+  "description": "low mile 2018+ Subaru Outback Touring 3.6R",
+  "identifier": "sub-outbk-touring",
+  "make": "Subaru",
+  "max_mileage": 25000,
+  "max_price": 36000,
+  "min_year": 2018,
+  "model": "Outback",
+  "title": "Touring Outback",
+  "trims": ["Touring", "Touring XT"]
+}

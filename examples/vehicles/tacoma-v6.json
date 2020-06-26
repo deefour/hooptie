@@ -1,0 +1,18 @@
+{
+  "autotrader": {
+    "make": "TOYOTA",
+    "model": "TACOMA"
+  },
+  "cylinders": [6],
+  "drivelines": ["awd", "4wd", "4x4"],
+  "description": "low mile 2016+ V6 Limited or TRD Pro Toyota Tacoma",
+  "identifier": "toyota-taco-newish",
+  "make": "Toyota",
+  "max_mileage": 30000,
+  "min_price": 18000,
+  "max_price": 42000,
+  "min_year": 2016,
+  "model": "Tacoma",
+  "title": "Newish Tacoma",
+  "trims": ["Limited", "TRD Pro", "TRD Off-Road"]
+}

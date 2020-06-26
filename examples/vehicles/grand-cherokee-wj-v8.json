@@ -1,0 +1,18 @@
+{
+  "autotrader": {
+    "make": "JEEP",
+    "model": "JEEPGRAND"
+  },
+  "cylinders": [8],
+  "drivelines": ["awd", "4wd", "4x4"],
+  "description": "2002-2004 V8 WJ Jeep Grand Cherokee, no Laredo trim, 4WD, and <80000 miles",
+  "identifier": "wj-jeep-replacement",
+  "make": "Jeep",
+  "max_mileage": 80000,
+  "min_price": 4500,
+  "max_price": 10000,
+  "min_year": 2002,
+  "model": "Grand Cherokee",
+  "title": "Replacement WJ",
+  "trims": ["Special Edition", "Overland", "Limited"]
+}

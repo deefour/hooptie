@@ -74,7 +74,7 @@ A `location` document must exist with the following attributes to describe the o
 
 ### The `vehicles` Collection
 
-A document must exist in the `vehicles` collection for each search to be performed. Here is the JSON representation of the document used to search for a 2018+ Subaru Outback Touring 3.6R I'm interested in.
+A document must exist in the `vehicles` collection for each search to be performed. Here is the JSON representation of the document used to search for a [2018+ Subaru Outback Touring 3.6R](examples/vehicles/outback-touring-36r.json) I'm interested in.
 
 ```json
 {
@@ -91,9 +91,11 @@ A document must exist in the `vehicles` collection for each search to be perform
   "min_year": 2018,
   "model": "Outback",
   "title": "Touring Outback",
-  "trims": ["Touring", "Touring XT"]
+  "trims": ["Touring", "Touring XT"],
 }
 ```
+
+Two more examples are a search for a [2002-2004 V8 Jeep Grand Cherokee](examples/vehicles/grand-cherokee-wj-v8.json) and a [well-optioned 2016+ V6 Toyota Tacoma](examples/vehicles/tacoma-v6.json).
 
 While the rest of this section describes expectations on the structure of the `vehcicles` documents in _some_ detail, the best resource is the `Vehicle`, `Trim`, and `AutoTraderCode` types in the [base `types.ts` file](https://github.com/deefour/hooptie/blob/master/src/types.ts).
 
