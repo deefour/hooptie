@@ -1,11 +1,11 @@
-import Vehicle, { Trim } from "../Vehicle";
-
-import Listing from "../Listing";
-import { MINIMUM_MILEAGE } from "../constants";
-import { SearchResult } from "./types";
-import Service from "./Service";
-import { baseUrl } from ".";
 import { get } from "lodash";
+
+import { baseUrl } from ".";
+import { MINIMUM_MILEAGE } from "../constants";
+import Listing from "../Listing";
+import Vehicle, { Trim } from "../Vehicle";
+import Service from "./Service";
+import { SearchResult } from "./types";
 
 export default class ResultTransformer {
   constructor(
