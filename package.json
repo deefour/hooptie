@@ -45,7 +45,7 @@
     "eslint-plugin-vue": "^6.2.2",
     "husky": "^4.2.5",
     "parcel-bundler": "^1.12.4",
-    "postcss-nested": "^4.2.1",
+    "postcss-nested": "^4.2.2",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
     "pug": "^3.0.0",
