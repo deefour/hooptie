@@ -780,10 +780,10 @@
   dependencies:
     "@bugsnag/core" "^7.2.0"
 
-"@bugsnag/core@^7.2.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@bugsnag/core/-/core-7.2.0.tgz#e2fa741fa2b6da210b5e6f27717103477df32de1"
-  integrity sha512-v1XpF5TVQYrwKpveL8cb1dBSA0DniGzI5we2ICJNmWhylLgzRKZuAs1HUxYB+5+beU51YNrEp8yQy/WKC6HiMg==
+"@bugsnag/core@^7.2.0", "@bugsnag/core@^7.2.1":
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/@bugsnag/core/-/core-7.2.1.tgz#b694121a677462639144a04fde2b0156885f8ef1"
+  integrity sha512-frGarZoLB2Rf7/ohsCcGW24qrt1D/EcOUehjAq1U/0R7Amw/oVeeyTE6bBu8OCIh7Giw7f8vfB6uHHxgEEfM9w==
   dependencies:
     "@bugsnag/cuid" "^3.0.0"
     "@bugsnag/safe-json-stringify" "^6.0.0"
@@ -816,12 +816,12 @@
     pump "^3.0.0"
     stack-generator "^2.0.3"
 
-"@bugsnag/plugin-vue@^7.2.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@bugsnag/plugin-vue/-/plugin-vue-7.2.0.tgz#8fd0c41dca6ebdcccc31ac98d76c3e458bebb269"
-  integrity sha512-NXxUEuXg995FhtAbHZzRFZI+7tkxJF0WDpJQXQJAVtFlttEAkI5gJfwyNF3JT1BQTLuTz5a92o2twr1XrMXdWg==
+"@bugsnag/plugin-vue@^7.2.1":
+  version "7.2.1"
+  resolved "https://registry.yarnpkg.com/@bugsnag/plugin-vue/-/plugin-vue-7.2.1.tgz#13f0fed3e1830dec15d2ed1209840e58cb76afce"
+  integrity sha512-UMJIum8tq6ltWTUQ4viBhKgso/2MOtEB6HMt3659d8D+YurHAsMaXR/15yJ0tNIJgVfExIC1k4gAcBCMHOtW3Q==
   dependencies:
-    "@bugsnag/core" "^7.2.0"
+    "@bugsnag/core" "^7.2.1"
 
 "@bugsnag/safe-json-stringify@^6.0.0":
   version "6.0.0"
